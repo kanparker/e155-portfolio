@@ -7,6 +7,9 @@ about:
         - icon: linkedin
           text: Linkedin
           href: https://www.linkedin.com/in/kanoa-parker-26707126a/
+        - icon: github
+          text: GitHub
+          href: https://github.com/kanparker
 
         
 ---

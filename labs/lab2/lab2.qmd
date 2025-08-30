@@ -1,8 +1,8 @@
 ---
-title: "Lab 1"
-description: "Lab 1"
+title: "Lab 2"
+description: "Lab 2"
 author: "Kanoa Parker"
 date: "8/29/205"
 ---
 
-Lab 1 tbd
+Lab 2 tbd

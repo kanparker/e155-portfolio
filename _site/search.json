@@ -1,10 +1,17 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "E155 Portfolio",
+    "objectID": "posts/first-post.html",
+    "href": "posts/first-post.html",
+    "title": "Hello Quarto",
     "section": "",
-    "text": "Hi im Kanoa Parker and this is my Portfolio. I’m a senior engineering major at Harvey Mudd College focusing in Electrical Engineering. In my free time I like to listen to music. Here is my LinkedIN\nThis is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+    "text": "My goals for this semster in micro p’s is to learn as much as I can. I want to get into a good work flow schedule and manage my time well. I think I can achieve this by setting aside specific time to do work and staying focused. We will see"
+  },
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "E155 Blog",
+    "section": "",
+    "text": "Hello Quarto\n\n\nWelcome to my Quarto portfolio\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -14,24 +21,31 @@
     "text": "About this site"
   },
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "E155 Portfolio",
+    "section": "",
+    "text": "Hi im Kanoa Parker and this is my Portfolio. I’m a senior engineering major at Harvey Mudd College focusing in Electrical Engineering. In my free time I like to listen to music. Here is my LinkedIN\nThis is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  },
+  {
     "objectID": "labss.html",
     "href": "labss.html",
-    "title": "LABS",
+    "title": "E155 Labs",
     "section": "",
-    "text": "LAB links will be here"
+    "text": "Lab 1\n\n\nLab 1\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 2\n\n\nLab 2\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 3\n\n\nLab 3\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 4\n\n\nLab 4\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 5\n\n\nLab 5\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 6\n\n\nLab 6\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 7\n\n\nLab 7\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "posts/first-post.html",
-    "href": "posts/first-post.html",
-    "title": "Hello Quarto",
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "E155 Resources",
     "section": "",
-    "text": "dis is the first blog"
+    "text": "Link to E155 Resources"
   },
   {
-    "objectID": "blog.html",
-    "href": "blog.html",
-    "title": "E155 Blog",
+    "objectID": "labs/lab6/lab6.html",
+    "href": "labs/lab6/lab6.html",
+    "title": "Lab 2",
     "section": "",
-    "text": "Hello Quarto\n\n\nWelcome to my Quarto portfolio\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
+    "text": "Lab 2 tbd"
   }
 ]
