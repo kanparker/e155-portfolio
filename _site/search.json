@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "E155 Portfolio",
+    "section": "",
+    "text": "Hi im Kanoa Parker and this is my Portfolio. I’m a senior engineering major at Harvey Mudd College focusing in Electrical Engineering. In my free time I like to listen to music. Here is my LinkedIN\nThis is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "labss.html",
+    "href": "labss.html",
+    "title": "LABS",
+    "section": "",
+    "text": "LAB links will be here"
+  },
+  {
+    "objectID": "posts/first-post.html",
+    "href": "posts/first-post.html",
+    "title": "Hello Quarto",
+    "section": "",
+    "text": "dis is the first blog"
+  },
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "E155 Blog",
+    "section": "",
+    "text": "Hello Quarto\n\n\nWelcome to my Quarto portfolio\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
+  }
+]

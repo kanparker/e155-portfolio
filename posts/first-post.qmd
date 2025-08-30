@@ -1,0 +1,12 @@
+---
+title: "Hello Quarto"
+description: "Welcome to my Quarto portfolio"
+author: "Kanoa Parker"
+date: "8/29/205"
+categories:
+  - reflection
+  - labreport
+draft: false
+---
+
+dis is the first blog

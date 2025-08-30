@@ -1,0 +1,22 @@
+---
+title: "E155 Portfolio"
+image: images\IMG_7147 (1).jpg
+about:
+    template: jolla
+    links:
+        - icon: linkedin
+          text: Linkedin
+          href: https://www.linkedin.com/in/kanoa-parker-26707126a/
+
+        
+---
+
+
+
+Hi im Kanoa Parker and this is my Portfolio. I'm a senior engineering major at Harvey Mudd College focusing in Electrical Engineering. In my free time I like to listen to music. Here is my [LinkedIN](https://www.linkedin.com/in/kanoa-parker-26707126a/)
+
+
+
+This is a Quarto website.
+
+To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
