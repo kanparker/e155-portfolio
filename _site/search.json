@@ -1,24 +1,38 @@
 [
   {
-    "objectID": "posts/first-post.html",
-    "href": "posts/first-post.html",
-    "title": "Hello Quarto",
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "E155 Resources",
     "section": "",
-    "text": "My goals for this semster in micro p’s is to learn as much as I can. I want to get into a good work flow schedule and manage my time well. I think I can achieve this by setting aside specific time to do work and staying focused. We will see"
+    "text": "Link to E155 Resources"
   },
   {
-    "objectID": "blog.html",
-    "href": "blog.html",
-    "title": "E155 Blog",
+    "objectID": "labss.html",
+    "href": "labss.html",
+    "title": "E155 Labs",
     "section": "",
-    "text": "Hello Quarto\n\n\nWelcome to my Quarto portfolio\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
+    "text": "Lab 1\n\n\nProgramming a Seven Segment display and 3 LEDs with Combinational Logic\n\n\n\n\n\nSep 2, 2025\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 2\n\n\nLab 2\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 3\n\n\nLab 3\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 4\n\n\nLab 4\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 5\n\n\nLab 5\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 6\n\n\nLab 6\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 7\n\n\nLab 7\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "labs/lab6/lab6.html",
+    "href": "labs/lab6/lab6.html",
+    "title": "Lab 6",
     "section": "",
-    "text": "About this site"
+    "text": "Lab 2 tbd"
+  },
+  {
+    "objectID": "labs/lab4/lab4.html",
+    "href": "labs/lab4/lab4.html",
+    "title": "Lab 4",
+    "section": "",
+    "text": "Lab 4 tbd"
+  },
+  {
+    "objectID": "labs/lab2/lab2.html",
+    "href": "labs/lab2/lab2.html",
+    "title": "Lab 2",
+    "section": "",
+    "text": "Lab 2 tbd"
   },
   {
     "objectID": "index.html",
@@ -28,24 +42,94 @@
     "text": "Hi im Kanoa Parker and this is my Portfolio. I’m a senior engineering major at Harvey Mudd College focusing in Electrical Engineering. In my free time I like to listen to music. Here is my LinkedIN\nThis is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
   },
   {
-    "objectID": "labss.html",
-    "href": "labss.html",
-    "title": "E155 Labs",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
     "section": "",
-    "text": "Lab 1\n\n\nLab 1\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 2\n\n\nLab 2\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 3\n\n\nLab 3\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 4\n\n\nLab 4\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 5\n\n\nLab 5\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 6\n\n\nLab 6\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 7\n\n\nLab 7\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
+    "text": "About this site"
   },
   {
-    "objectID": "resources.html",
-    "href": "resources.html",
-    "title": "E155 Resources",
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "E155 Blog",
     "section": "",
-    "text": "Link to E155 Resources"
+    "text": "Hello Quarto\n\n\nWelcome to my Quarto portfolio\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "labs/lab6/lab6.html",
-    "href": "labs/lab6/lab6.html",
-    "title": "Lab 2",
+    "objectID": "labs/lab1/lab1.html",
+    "href": "labs/lab1/lab1.html",
+    "title": "Lab 1",
     "section": "",
-    "text": "Lab 2 tbd"
+    "text": "Introduction\nSchematic\nBlock Diagram\nVerilog Code 4.1 top 4.2 seven_segment_display 4.3 three_led\nTest Benches 5.1 testbench 5.2 seven_testbench 5.3 three_testbench\nNotes"
+  },
+  {
+    "objectID": "labs/lab3/lab3.html",
+    "href": "labs/lab3/lab3.html",
+    "title": "Lab 3",
+    "section": "",
+    "text": "Lab 3 tbd"
+  },
+  {
+    "objectID": "labs/lab5/lab5.html",
+    "href": "labs/lab5/lab5.html",
+    "title": "Lab 5",
+    "section": "",
+    "text": "Lab 5 tbd"
+  },
+  {
+    "objectID": "labs/lab7/lab7.html",
+    "href": "labs/lab7/lab7.html",
+    "title": "Lab 7",
+    "section": "",
+    "text": "Lab 7 tbd"
+  },
+  {
+    "objectID": "posts/first-post.html",
+    "href": "posts/first-post.html",
+    "title": "Hello Quarto",
+    "section": "",
+    "text": "My goals for this semster in micro p’s is to learn as much as I can. I want to get into a good work flow schedule and manage my time well. I think I can achieve this by setting aside specific time to do work and staying focused. We will see"
+  },
+  {
+    "objectID": "labs/lab1/lab1.html#top",
+    "href": "labs/lab1/lab1.html#top",
+    "title": "Lab 1",
+    "section": "top ",
+    "text": "top \nmodule top(\n    input   logic   [3:0]s,\n    output  logic [2:0]led,\n    output logic [6:0]seg\n);\n\n    three_led three(s, led);\n    seven_seg_display seven(s,seg);\n    \n    \n\nendmodule\nTop level module."
+  },
+  {
+    "objectID": "labs/lab1/lab1.html#seven_segment_display",
+    "href": "labs/lab1/lab1.html#seven_segment_display",
+    "title": "Lab 1",
+    "section": "seven_segment_display ",
+    "text": "seven_segment_display \nmodule seven_seg_display(\n    input   logic   [3:0]s,\n    output  logic [6:0]seg\n);\n\n    logic A,B,C,D;\n    \n    assign A = s[3];\n    assign B = s[2];\n    assign C = s[1];\n    assign D = s[0];\n    \n    assign seg[6] = (~A&~C)&(B^D) | A&(~B&C&D | B&~C);\n    assign seg[5] = D&~(A^C) | B&(C&~D | A&~C&~D);\n    assign seg[4] = ~A&~B&C&~D | (A&B)&( ~C&~D | C);\n    assign seg[3] = (~A&D)& ~(B^C) | (A&~B)&(C^D) | B&( ~(A|C|D) | A&C&D);\n    assign seg[2] = (~A&~B&D) | (~A&B&~C) | (~A&B&C&D) | (A&~B&~C&D);\n    assign seg[1] = (~(A|B|C) & D) | (~A&~B&C) | (~A&B&C&D) | (A&B&~C);\n    assign seg[0] = ~(A|B|C|D) | (~A&~B&~C&D) | (~A&B&C&D);\n    \n\nendmodule\nSeven segment display takes an input of four switches, s[3:0], and ouputs to light up the seven segment display, seg[6:0]"
+  },
+  {
+    "objectID": "labs/lab1/lab1.html#three_led",
+    "href": "labs/lab1/lab1.html#three_led",
+    "title": "Lab 1",
+    "section": "three_led ",
+    "text": "three_led \nmodule three_led(\n    input   logic   [3:0]s,\n    output  logic [2:0]led\n);\n\n    logic int_osc;\n    logic pulse;\n    logic led_state = 0;\n    logic [31:0] counter = 0;\n    logic [31:0] P;\n    \n    assign P = 32'b00000000000000000000000011010111;\n    \n    // Internal high-speed oscillator\n    HSOSC hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));\n    \n    // Simple clock divider\n    always_ff @(posedge int_osc)\n        begin\n            counter &lt;= counter + P;\n        end\n    \n    xor x1(led[0],s[1],s[0]);\n    and a1(led[1],s[3],s[2]);\n    \n    assign led[2] = counter[31];\n    \n\nendmodule\nThree led takes in an input of four switches, s[3:0], and turns on or off leds, led[2:0]."
+  },
+  {
+    "objectID": "labs/lab1/lab1.html#test_bench",
+    "href": "labs/lab1/lab1.html#test_bench",
+    "title": "Lab 1",
+    "section": "test_bench ",
+    "text": "test_bench \n Link to Test Bench File"
+  },
+  {
+    "objectID": "labs/lab1/lab1.html#seven_testbench",
+    "href": "labs/lab1/lab1.html#seven_testbench",
+    "title": "Lab 1",
+    "section": "seven_testbench ",
+    "text": "seven_testbench \n Link to Test Bench File"
+  },
+  {
+    "objectID": "labs/lab1/lab1.html#three_testbench",
+    "href": "labs/lab1/lab1.html#three_testbench",
+    "title": "Lab 1",
+    "section": "three_testbench ",
+    "text": "three_testbench \n Link to Test Bench File"
   }
 ]

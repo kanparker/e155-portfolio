@@ -1,8 +1,133 @@
 ---
 title: "Lab 1"
-description: "Lab 1"
+description: "Programming a Seven Segment display and 3 LEDs with Combinational Logic"
 author: "Kanoa Parker"
-date: "8/29/205"
+date: "9/2/2025"
 ---
+# Table of Contents
+1. [Introduction](#introduction)
+2. [Schematic](#Schematic)
+3. [Block Diagram](#block_diagram)
+4. [Verilog Code](#verilog_code)
+        4.1 [top](#topmod)
+        4.2 [seven_segment_display](#sevenseg)
+        4.3 [three_led](#threeled)
+5. [Test Benches](#test_benches)
+    5.1 [testbench](#test_bench)
+    5.2 [seven_testbench](#seven_tb)
+    5.3 [three_testbench](#three_tb)
 
-Lab 1 tbd
+6. [Notes](#notes_extra)
+
+# This it the Introduction <a name="introdction"></a>
+
+In this lab I built my E155 develpement board with contains a UPduino v3.1 FPGA and a Nucleo-L432KC boards. Using Verilog HDL I programmed the FPGA to control a seven segmented display to show Hexadecimal 0x6 to Fx6. Before programming the board I simulated my hardware in Questa Simulations using a test bench. In addition the FPGA also controls 3 LEDS.
+
+# Schematic <a name="Schematic"></a>
+![Schematic of Bread Board](images\schematiclab111.png)
+
+# Block Diagram <a name="block_diagram"></a>
+![Blcok Diagramof Verilog Code](images\blockdiagram-12.jpg)
+
+# Verilog Code <a name="verilog_code"></a>
+This section contains verilog code for modules top seven_segment_display and three_led
+
+## top <a name="topmod"></a>
+
+```Verilog
+module top(
+	input 	logic	[3:0]s,
+	output 	logic [2:0]led,
+	output logic [6:0]seg
+);
+
+	three_led three(s, led);
+	seven_seg_display seven(s,seg);
+	
+	
+
+endmodule
+
+```
+Top level module. 
+
+## seven_segment_display <a name="sevenseg"></a>
+
+```verilog
+module seven_seg_display(
+	input 	logic	[3:0]s,
+	output 	logic [6:0]seg
+);
+
+	logic A,B,C,D;
+	
+	assign A = s[3];
+	assign B = s[2];
+	assign C = s[1];
+	assign D = s[0];
+	
+	assign seg[6] = (~A&~C)&(B^D) | A&(~B&C&D | B&~C);
+	assign seg[5] = D&~(A^C) | B&(C&~D | A&~C&~D);
+	assign seg[4] = ~A&~B&C&~D | (A&B)&( ~C&~D | C);
+	assign seg[3] = (~A&D)& ~(B^C) | (A&~B)&(C^D) | B&( ~(A|C|D) | A&C&D);
+	assign seg[2] = (~A&~B&D) | (~A&B&~C) | (~A&B&C&D) | (A&~B&~C&D);
+	assign seg[1] = (~(A|B|C) & D) | (~A&~B&C) | (~A&B&C&D) | (A&B&~C);
+	assign seg[0] = ~(A|B|C|D) | (~A&~B&~C&D) | (~A&B&C&D);
+	
+
+endmodule
+```
+Seven segment display takes an input of four switches, s[3:0], and ouputs to light up the seven segment display, seg[6:0]
+
+## three_led    <a name="three_led"></a>
+```verilog
+module three_led(
+	input 	logic	[3:0]s,
+	output 	logic [2:0]led
+);
+
+	logic int_osc;
+	logic pulse;
+	logic led_state = 0;
+	logic [31:0] counter = 0;
+	logic [31:0] P;
+	
+	assign P = 32'b00000000000000000000000011010111;
+	
+	// Internal high-speed oscillator
+	HSOSC hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));
+	
+	// Simple clock divider
+	always_ff @(posedge int_osc)
+		begin
+			counter <= counter + P;
+		end
+	
+	xor x1(led[0],s[1],s[0]);
+	and a1(led[1],s[3],s[2]);
+	
+	assign led[2] = counter[31];
+	
+
+endmodule
+```
+
+Three led takes in an input of four switches, s[3:0], and turns on or off leds, led[2:0].
+
+# Test Benches <a name="test_benches"></a>
+
+
+## test_bench <a name="test_bench"></a>
+![Full Test Bench Sim Results](images\fulltestbenchsim.jpg)
+[Link to Test Bench File](https://github.com/kanparker/E155-lab1/blob/lab1branch/fpga/src/e155_lab1/source/impl_1/testbench.sv)
+
+## seven_testbench <a name="seven_tb"></a>
+![Full Test Bench Sim Results](images\sevensegsim.jpg)
+[Link to Test Bench File](https://github.com/kanparker/E155-lab1/blob/lab1branch/fpga/src/e155_lab1/source/impl_1/testbench_seven.sv)
+
+## three_testbench <a name="three_tb"></a>
+![Full Test Bench Sim Results](images\threeled.jpg)
+[Link to Test Bench File](https://github.com/kanparker/E155-lab1/blob/lab1branch/fpga/src/e155_lab1/source/impl_1/testbench_three.sv)
+
+# Notes <a name="notes_extra"></a>
+![LED calculations](images/LABI.-10.jpg)

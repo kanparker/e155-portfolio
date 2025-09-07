@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.21">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Kanoa Parker">
+<meta name="dcterms.date" content="2025-09-02">
+<meta name="description" content="Programming a Seven Segment display and 3 LEDs with Combinational Logic">
 
-<title>lab1 – E155 Portfolio</title>
+<title>Lab 1 – E155 Portfolio</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -32,15 +70,14 @@ ul.task-list li input[type="checkbox"] {
 <meta name="quarto:offset" content="../../">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-e31584831b205ffbb2d98406f31c2a5b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -80,8 +117,6 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">E155 Portfolio</span>
     </a>
@@ -104,6 +139,10 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../../labss.html"> 
 <span class="menu-text">LABS</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resources.html"> 
+<span class="menu-text">resources</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -115,17 +154,208 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#table-of-contents" id="toc-table-of-contents" class="nav-link active" data-scroll-target="#table-of-contents">Table of Contents</a></li>
+  <li><a href="#this-it-the-introduction" id="toc-this-it-the-introduction" class="nav-link" data-scroll-target="#this-it-the-introduction">This it the Introduction </a><a name="introdction" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#schematic" id="toc-schematic" class="nav-link" data-scroll-target="#schematic">Schematic </a><a name="Schematic" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#block-diagram" id="toc-block-diagram" class="nav-link" data-scroll-target="#block-diagram">Block Diagram </a><a name="block_diagram" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#verilog-code" id="toc-verilog-code" class="nav-link" data-scroll-target="#verilog-code">Verilog Code </a><a name="verilog_code" class="nav-link" data-scroll-target="undefined"></a>
+  <ul class="collapse">
+  <li><a href="#top" id="toc-top" class="nav-link" data-scroll-target="#top">top </a><a name="topmod" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#seven_segment_display" id="toc-seven_segment_display" class="nav-link" data-scroll-target="#seven_segment_display">seven_segment_display </a><a name="sevenseg" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#three_led" id="toc-three_led" class="nav-link" data-scroll-target="#three_led">three_led </a><a name="three_led" class="nav-link" data-scroll-target="undefined"></a></li>
+  </ul></li>
+  <li><a href="#test-benches" id="toc-test-benches" class="nav-link" data-scroll-target="#test-benches">Test Benches </a><a name="test_benches" class="nav-link" data-scroll-target="undefined"></a>
+  <ul class="collapse">
+  <li><a href="#test_bench" id="toc-test_bench" class="nav-link" data-scroll-target="#test_bench">test_bench </a><a name="test_bench" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#seven_testbench" id="toc-seven_testbench" class="nav-link" data-scroll-target="#seven_testbench">seven_testbench </a><a name="seven_tb" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#three_testbench" id="toc-three_testbench" class="nav-link" data-scroll-target="#three_testbench">three_testbench </a><a name="three_tb" class="nav-link" data-scroll-target="undefined"></a></li>
+  </ul></li>
+  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes </a><a name="notes_extra" class="nav-link" data-scroll-target="undefined"></a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lab 1</h1>
+</div>
+
+<div>
+  <div class="description">
+    Programming a Seven Segment display and 3 LEDs with Combinational Logic
+  </div>
+</div>
 
 
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kanoa Parker </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 2, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
 
 
+</header>
 
 
+<section id="table-of-contents" class="level1">
+<h1>Table of Contents</h1>
+<ol type="1">
+<li><p><a href="#introduction">Introduction</a></p></li>
+<li><p><a href="#Schematic">Schematic</a></p></li>
+<li><p><a href="#block_diagram">Block Diagram</a></p></li>
+<li><p><a href="#verilog_code">Verilog Code</a> 4.1 <a href="#topmod">top</a> 4.2 <a href="#sevenseg">seven_segment_display</a> 4.3 <a href="#threeled">three_led</a></p></li>
+<li><p><a href="#test_benches">Test Benches</a> 5.1 <a href="#test_bench">testbench</a> 5.2 <a href="#seven_tb">seven_testbench</a> 5.3 <a href="#three_tb">three_testbench</a></p></li>
+<li><p><a href="#notes_extra">Notes</a></p></li>
+</ol>
+</section>
+<section id="this-it-the-introduction" class="level1">
+<h1>This it the Introduction <a name="introdction"></a></h1>
+<p>In this lab I built my E155 develpement board with contains a UPduino v3.1 FPGA and a Nucleo-L432KC boards. Using Verilog HDL I programmed the FPGA to control a seven segmented display to show Hexadecimal 0x6 to Fx6. Before programming the board I simulated my hardware in Questa Simulations using a test bench. In addition the FPGA also controls 3 LEDS.</p>
+</section>
+<section id="schematic" class="level1">
+<h1>Schematic <a name="Schematic"></a></h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\schematiclab111.png" class="img-fluid figure-img"></p>
+<figcaption>Schematic of Bread Board</figcaption>
+</figure>
+</div>
+</section>
+<section id="block-diagram" class="level1">
+<h1>Block Diagram <a name="block_diagram"></a></h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\blockdiagram-12.jpg" class="img-fluid figure-img"></p>
+<figcaption>Blcok Diagramof Verilog Code</figcaption>
+</figure>
+</div>
+</section>
+<section id="verilog-code" class="level1">
+<h1>Verilog Code <a name="verilog_code"></a></h1>
+<p>This section contains verilog code for modules top seven_segment_display and three_led</p>
+<section id="top" class="level2">
+<h2 class="anchored" data-anchor-id="top">top <a name="topmod"></a></h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> top<span class="op">(</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span>   logic   <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>s<span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span>  logic <span class="op">[</span><span class="dv">2</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>led<span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>seg</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    three_led three<span class="op">(</span>s<span class="op">,</span> led<span class="op">);</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    seven_seg_display seven<span class="op">(</span>s<span class="op">,</span>seg<span class="op">);</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Top level module.</p>
+</section>
+<section id="seven_segment_display" class="level2">
+<h2 class="anchored" data-anchor-id="seven_segment_display">seven_segment_display <a name="sevenseg"></a></h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> seven_seg_display<span class="op">(</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span>   logic   <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>s<span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span>  logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>seg</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    logic A<span class="op">,</span>B<span class="op">,</span>C<span class="op">,</span>D<span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> A <span class="op">=</span> s<span class="op">[</span><span class="dv">3</span><span class="op">];</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> B <span class="op">=</span> s<span class="op">[</span><span class="dv">2</span><span class="op">];</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> C <span class="op">=</span> s<span class="op">[</span><span class="dv">1</span><span class="op">];</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> D <span class="op">=</span> s<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> seg<span class="op">[</span><span class="dv">6</span><span class="op">]</span> <span class="op">=</span> <span class="op">(~</span>A<span class="op">&amp;~</span>C<span class="op">)&amp;(</span>B<span class="op">^</span>D<span class="op">)</span> <span class="op">|</span> A<span class="op">&amp;(~</span>B<span class="op">&amp;</span>C<span class="op">&amp;</span>D <span class="op">|</span> B<span class="op">&amp;~</span>C<span class="op">);</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> seg<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> D<span class="op">&amp;~(</span>A<span class="op">^</span>C<span class="op">)</span> <span class="op">|</span> B<span class="op">&amp;(</span>C<span class="op">&amp;~</span>D <span class="op">|</span> A<span class="op">&amp;~</span>C<span class="op">&amp;~</span>D<span class="op">);</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> seg<span class="op">[</span><span class="dv">4</span><span class="op">]</span> <span class="op">=</span> <span class="op">~</span>A<span class="op">&amp;~</span>B<span class="op">&amp;</span>C<span class="op">&amp;~</span>D <span class="op">|</span> <span class="op">(</span>A<span class="op">&amp;</span>B<span class="op">)&amp;(</span> <span class="op">~</span>C<span class="op">&amp;~</span>D <span class="op">|</span> C<span class="op">);</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> seg<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="op">(~</span>A<span class="op">&amp;</span>D<span class="op">)&amp;</span> <span class="op">~(</span>B<span class="op">^</span>C<span class="op">)</span> <span class="op">|</span> <span class="op">(</span>A<span class="op">&amp;~</span>B<span class="op">)&amp;(</span>C<span class="op">^</span>D<span class="op">)</span> <span class="op">|</span> B<span class="op">&amp;(</span> <span class="op">~(</span>A<span class="op">|</span>C<span class="op">|</span>D<span class="op">)</span> <span class="op">|</span> A<span class="op">&amp;</span>C<span class="op">&amp;</span>D<span class="op">);</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> seg<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> <span class="op">(~</span>A<span class="op">&amp;~</span>B<span class="op">&amp;</span>D<span class="op">)</span> <span class="op">|</span> <span class="op">(~</span>A<span class="op">&amp;</span>B<span class="op">&amp;~</span>C<span class="op">)</span> <span class="op">|</span> <span class="op">(~</span>A<span class="op">&amp;</span>B<span class="op">&amp;</span>C<span class="op">&amp;</span>D<span class="op">)</span> <span class="op">|</span> <span class="op">(</span>A<span class="op">&amp;~</span>B<span class="op">&amp;~</span>C<span class="op">&amp;</span>D<span class="op">);</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> seg<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="op">(~(</span>A<span class="op">|</span>B<span class="op">|</span>C<span class="op">)</span> <span class="op">&amp;</span> D<span class="op">)</span> <span class="op">|</span> <span class="op">(~</span>A<span class="op">&amp;~</span>B<span class="op">&amp;</span>C<span class="op">)</span> <span class="op">|</span> <span class="op">(~</span>A<span class="op">&amp;</span>B<span class="op">&amp;</span>C<span class="op">&amp;</span>D<span class="op">)</span> <span class="op">|</span> <span class="op">(</span>A<span class="op">&amp;</span>B<span class="op">&amp;~</span>C<span class="op">);</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> seg<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="op">~(</span>A<span class="op">|</span>B<span class="op">|</span>C<span class="op">|</span>D<span class="op">)</span> <span class="op">|</span> <span class="op">(~</span>A<span class="op">&amp;~</span>B<span class="op">&amp;~</span>C<span class="op">&amp;</span>D<span class="op">)</span> <span class="op">|</span> <span class="op">(~</span>A<span class="op">&amp;</span>B<span class="op">&amp;</span>C<span class="op">&amp;</span>D<span class="op">);</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Seven segment display takes an input of four switches, s[3:0], and ouputs to light up the seven segment display, seg[6:0]</p>
+</section>
+<section id="three_led" class="level2">
+<h2 class="anchored" data-anchor-id="three_led">three_led <a name="three_led"></a></h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> three_led<span class="op">(</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span>   logic   <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>s<span class="op">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span>  logic <span class="op">[</span><span class="dv">2</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>led</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    logic int_osc<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    logic pulse<span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    logic led_state <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">31</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> counter <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">31</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> P<span class="op">;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> P <span class="op">=</span> <span class="bn">32'b00000000000000000000000011010111</span><span class="op">;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Internal high-speed oscillator</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    HSOSC hf_osc <span class="op">(</span>.CLKHFPU<span class="op">(</span><span class="bn">1'b1</span><span class="op">),</span> .CLKHFEN<span class="op">(</span><span class="bn">1'b1</span><span class="op">),</span> .CLKHF<span class="op">(</span>int_osc<span class="op">));</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Simple clock divider</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    always_ff <span class="op">@(</span><span class="kw">posedge</span> int_osc<span class="op">)</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="kw">begin</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>            counter <span class="op">&lt;=</span> counter <span class="op">+</span> P<span class="op">;</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="dt">xor</span> x1<span class="op">(</span>led<span class="op">[</span><span class="dv">0</span><span class="op">],</span>s<span class="op">[</span><span class="dv">1</span><span class="op">],</span>s<span class="op">[</span><span class="dv">0</span><span class="op">]);</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">and</span> a1<span class="op">(</span>led<span class="op">[</span><span class="dv">1</span><span class="op">],</span>s<span class="op">[</span><span class="dv">3</span><span class="op">],</span>s<span class="op">[</span><span class="dv">2</span><span class="op">]);</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> led<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> counter<span class="op">[</span><span class="dv">31</span><span class="op">];</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Three led takes in an input of four switches, s[3:0], and turns on or off leds, led[2:0].</p>
+</section>
+</section>
+<section id="test-benches" class="level1">
+<h1>Test Benches <a name="test_benches"></a></h1>
+<section id="test_bench" class="level2">
+<h2 class="anchored" data-anchor-id="test_bench">test_bench <a name="test_bench"></a></h2>
+<p><img src="images\fulltestbenchsim.jpg" class="img-fluid" alt="Full Test Bench Sim Results"> <a href="https://github.com/kanparker/E155-lab1/blob/lab1branch/fpga/src/e155_lab1/source/impl_1/testbench.sv">Link to Test Bench File</a></p>
+</section>
+<section id="seven_testbench" class="level2">
+<h2 class="anchored" data-anchor-id="seven_testbench">seven_testbench <a name="seven_tb"></a></h2>
+<p><img src="images\sevensegsim.jpg" class="img-fluid" alt="Full Test Bench Sim Results"> <a href="https://github.com/kanparker/E155-lab1/blob/lab1branch/fpga/src/e155_lab1/source/impl_1/testbench_seven.sv">Link to Test Bench File</a></p>
+</section>
+<section id="three_testbench" class="level2">
+<h2 class="anchored" data-anchor-id="three_testbench">three_testbench <a name="three_tb"></a></h2>
+<p><img src="images\threeled.jpg" class="img-fluid" alt="Full Test Bench Sim Results"> <a href="https://github.com/kanparker/E155-lab1/blob/lab1branch/fpga/src/e155_lab1/source/impl_1/testbench_three.sv">Link to Test Bench File</a></p>
+</section>
+</section>
+<section id="notes" class="level1">
+<h1>Notes <a name="notes_extra"></a></h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/LABI.-10.jpg" class="img-fluid figure-img"></p>
+<figcaption>LED calculations</figcaption>
+</figure>
+</div>
+
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
