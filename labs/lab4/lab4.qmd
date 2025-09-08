@@ -1,8 +1,0 @@
----
-title: "Lab 4"
-description: "Lab 4"
-author: "Kanoa Parker"
-date: "8/29/205"
----
-
-Lab 4 tbd

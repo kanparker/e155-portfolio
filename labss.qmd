@@ -1,8 +1,0 @@
----
-title: "E155 Labs"
-listing:
-  contents: labs
-  sort: "false"
-  type: default
-  categories: false
----

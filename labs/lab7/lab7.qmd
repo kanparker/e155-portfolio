@@ -1,8 +1,0 @@
----
-title: "Lab 7"
-description: "Lab 7"
-author: "Kanoa Parker"
-date: "8/29/205"
----
-
-Lab 7 tbd
