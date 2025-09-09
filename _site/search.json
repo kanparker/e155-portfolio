@@ -1,45 +1,17 @@
 [
   {
-    "objectID": "posts/first-post.html",
-    "href": "posts/first-post.html",
-    "title": "Hello Quarto",
+    "objectID": "resources.html",
+    "href": "resources.html",
+    "title": "E155 Resources",
     "section": "",
-    "text": "My goals for this semster in micro p’s is to learn as much as I can. I want to get into a good work flow schedule and manage my time well. I think I can achieve this by setting aside specific time to do work and staying focused. We will see"
-  },
-  {
-    "objectID": "blog.html",
-    "href": "blog.html",
-    "title": "E155 Blog",
-    "section": "",
-    "text": "Hello Quarto\n\n\nWelcome to my Quarto portfolio\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "About this site"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "E155 Portfolio",
-    "section": "",
-    "text": "Hi im Kanoa Parker and this is my Portfolio. I’m a senior engineering major at Harvey Mudd College focusing in Electrical Engineering. In my free time I like to listen to music. Here is my LinkedIN\nThis is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+    "text": "Link to E155 Resources"
   },
   {
     "objectID": "labss.html",
     "href": "labss.html",
     "title": "E155 Labs",
     "section": "",
-    "text": "Lab 1\n\n\nProgramming a Seven Segment display and 3 LEDs with Combinational Logic\n\n\n\n\n\nSep 2, 2025\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 2\n\n\nLab 2\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 3\n\n\nLab 3\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 4\n\n\nLab 4\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 5\n\n\nLab 5\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 6\n\n\nLab 6\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 7\n\n\nLab 7\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "resources.html",
-    "href": "resources.html",
-    "title": "E155 Resources",
-    "section": "",
-    "text": "Link to E155 Resources"
+    "text": "Lab 1\n\n\nProgramming a Seven Segment display and 3 LEDs with Combinational Logic\n\n\n\n\n\nSep 2, 2025\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 2\n\n\nProgramming a Dual Seven Segment display controlled by 2 sets of 4 dipswitches. Using a time multiplexer the inputs from four switches control one half of the display. In addition 5 leds indicate the sum of the two sets of 4 dip switches.\n\n\n\n\n\nSep 9, 2025\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 3\n\n\nLab 3\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 4\n\n\nLab 4\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 5\n\n\nLab 5\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 6\n\n\nLab 6\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 7\n\n\nLab 7\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "labs/lab6/lab6.html",
@@ -60,28 +32,28 @@
     "href": "labs/lab2/lab2.html",
     "title": "Lab 2",
     "section": "",
-    "text": "Lab 2 tbd"
+    "text": "Introduction\nSchematic\nBlock Diagram\nVerilog Code 4.1 top 4.2 seven_seg_display 4.3 clock_divider\nTest Benches 5.1 testbench 5.2 seven_testbench\nNotes\n\n7.AI Prototype"
   },
   {
-    "objectID": "labs/lab3/lab3.html",
-    "href": "labs/lab3/lab3.html",
-    "title": "Lab 3",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "E155 Portfolio",
     "section": "",
-    "text": "Lab 3 tbd"
+    "text": "Hi im Kanoa Parker and this is my Portfolio. I’m a senior engineering major at Harvey Mudd College focusing in Electrical Engineering. In my free time I like to listen to music. Here is my LinkedIN\nThis is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
   },
   {
-    "objectID": "labs/lab5/lab5.html",
-    "href": "labs/lab5/lab5.html",
-    "title": "Lab 5",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
     "section": "",
-    "text": "Lab 5 tbd"
+    "text": "About this site"
   },
   {
-    "objectID": "labs/lab7/lab7.html",
-    "href": "labs/lab7/lab7.html",
-    "title": "Lab 7",
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "E155 Blog",
     "section": "",
-    "text": "Lab 7 tbd"
+    "text": "Hello Quarto\n\n\nWelcome to my Quarto portfolio\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "labs/lab1/lab1.html",
@@ -131,5 +103,89 @@
     "title": "Lab 1",
     "section": "three_testbench ",
     "text": "three_testbench \n Link to Test Bench File"
+  },
+  {
+    "objectID": "labs/lab3/lab3.html",
+    "href": "labs/lab3/lab3.html",
+    "title": "Lab 3",
+    "section": "",
+    "text": "Lab 3 tbd"
+  },
+  {
+    "objectID": "labs/lab5/lab5.html",
+    "href": "labs/lab5/lab5.html",
+    "title": "Lab 5",
+    "section": "",
+    "text": "Lab 5 tbd"
+  },
+  {
+    "objectID": "labs/lab7/lab7.html",
+    "href": "labs/lab7/lab7.html",
+    "title": "Lab 7",
+    "section": "",
+    "text": "Lab 7 tbd"
+  },
+  {
+    "objectID": "posts/first-post.html",
+    "href": "posts/first-post.html",
+    "title": "Hello Quarto",
+    "section": "",
+    "text": "My goals for this semster in micro p’s is to learn as much as I can. I want to get into a good work flow schedule and manage my time well. I think I can achieve this by setting aside specific time to do work and staying focused. We will see"
+  },
+  {
+    "objectID": "labs/lab2/lab2.html#top",
+    "href": "labs/lab2/lab2.html#top",
+    "title": "Lab 2",
+    "section": "top ",
+    "text": "top \n/*\nTitle: top module for lab 2\nAuthor: Kanoa Parker\nEmail: kanparker@g.hmc.edu\nDate: 9/9/2024\nDescription: Top module for lab 2. Takes in inputs of 2 sets of 4 switches, s1 and s2. Outputs the sum of s1 and s2 as led. Using a time multiplexer the mux choses either to output either s1 or s2 as seg using seven_seg_display module. gate1 and gate1 go to transistor gates which control which set of leds get turned on.\n*/\nmodule top(\n    input logic [3:0]s1,\n    input logic [3:0]s2,\n    output logic [6:0]seg, \n    output logic [4:0]led,\n    output logic gate1, gate2,\n    output logic clk\n);\n    //s1 is inputs of one set of 4 dip swithces\n    //s2 is inputs of other set of 4 dip switches\n    //seg is the output to drive seven segment display\n    // gate1 and gate2 go to base of BJT to control power to seven segment display\n    // clk is output used for testing\n    \n    //sev_seg_in is the input to seven_seg_display module\n    logic [3:0]sev_seg_in;\n    \n    //sev_seg_out is the output of seven_seg_display module\n    logic [6:0]sev_seg_out;\n\n    //instancing seven_seg_display\n    seven_seg_display seven_seg_counter(sev_seg_in,seg);\n    //instancing clock divider\n    clock_divider slow_clock(clk);\n    \n    //muxing between s1 and s2\n    always_comb\n        case(clk)\n            1'b1: begin\n                    sev_seg_in = s1[3:0]; \n                    gate1 = 1'b1;\n                    gate2 =1'b0;\n                end\n            1'b0: begin\n                    sev_seg_in = s2[3:0];\n                    gate1 = 1'b0;\n                    gate2 = 1'b1;\n                end\n        endcase\n    //sum of s1 and s2 to led   \n        assign led = s1 + s2;\n        \nendmodule\nTop module for lab 2. Takes in inputs of 2 sets of 4 switches, s1 and s2. Outputs the sum of s1 and s2 as led. Using a time multiplexer the mux choses either to output either s1 or s2 as seg using seven_seg_display module. gate1 and gate1 go to transistor gates which control which set of leds get turned on."
+  },
+  {
+    "objectID": "labs/lab2/lab2.html#seven_segment_display",
+    "href": "labs/lab2/lab2.html#seven_segment_display",
+    "title": "Lab 2",
+    "section": "seven_segment_display ",
+    "text": "seven_segment_display \n/*\nTitle: seven_seg_display\nAuthor: Kanoa Parker\nEmail: kanparker@g.hmc.edu\nDate: 9/9/2024\nDescription: Takes in 4 switch inputs and outputs control signal for a seven segment display\n*/\nmodule seven_seg_display(\n    input   logic   [3:0]s,\n    output  logic [6:0]seg\n);\n    //logic used for old boolean algebra method\n    logic A,B,C,D;\n    \n    assign A = s[3];\n    assign B = s[2];\n    assign C = s[1];\n    assign D = s[0];\n    \n    //old boolean algrebra method\n    /*\n    assign seg[6] = (~A&~C)&(B^D) | A&(~B&C&D | B&~C);\n    assign seg[5] = D&~(A^C) | B&(C&~D | A&~C&~D);\n    assign seg[4] = ~A&~B&C&~D | (A&B)&( ~C&~D | C);\n    assign seg[3] = (~A&D)& ~(B^C) | (A&~B)&(C^D) | B&( ~(A|C|D) | A&C&D);\n    assign seg[2] = (~A&~B&D) | (~A&B&~C) | (~A&B&C&D) | (A&~B&~C&D);\n    assign seg[1] = (~(A|B|C) & D) | (~A&~B&C) | (~A&B&C&D) | (A&B&~C);\n    assign seg[0] = ~(A|B|C|D) | (~A&~B&~C&D) | (~A&B&C&D);\n    */\n    \n    //case statement that map input to output\n    always_comb\n        case(s[3:0])\n            /// 0\n            4'b0000: seg[6:0] = 7'b0000001;\n            /// 1\n            4'b0001: seg[6:0] = 7'b1001111;\n            /// 2\n            4'b0010: seg[6:0] = 7'b0010010;\n            /// 3\n            4'b0011:seg[6:0] = 7'b0000110;\n            /// 4\n            4'b0100:seg[6:0] = 7'b1001100;\n            /// 5\n            4'b0101:seg[6:0] = 7'b0100100;\n            /// 6\n            4'b0110:seg[6:0] = 7'b0100000;\n            /// 7\n            4'b0111:seg[6:0] = 7'b0001111;\n            /// 8\n            4'b1000:seg[6:0] = 7'b0000000;\n            /// 9\n            4'b1001:seg[6:0] = 7'b0001100;\n            /// A\n            4'b1010:seg[6:0] = 7'b0001000;\n            /// B\n            4'b1011:seg[6:0] = 7'b1100000;\n            /// C\n            4'b1100:seg[6:0] = 7'b0110001;\n            /// D\n            4'b1101:seg[6:0] = 7'b1000010;\n            /// E\n            4'b1110:seg[6:0] = 7'b0110000;\n            /// F\n            4'b1111:seg[6:0] = 7'b0111000;\n        endcase\n            \n    //see notes for segment conrispondice to led\n\nendmodule\nSeven segment display takes an input of four switches, s[3:0], and ouputs to light up the seven segment display, seg[6:0]"
+  },
+  {
+    "objectID": "labs/lab2/lab2.html#three_led",
+    "href": "labs/lab2/lab2.html#three_led",
+    "title": "Lab 1",
+    "section": "three_led ",
+    "text": "three_led \nmodule three_led(\n    input   logic   [3:0]s,\n    output  logic [2:0]led\n);\n\n    logic int_osc;\n    logic pulse;\n    logic led_state = 0;\n    logic [31:0] counter = 0;\n    logic [31:0] P;\n    \n    assign P = 32'b00000000000000000000000011010111;\n    \n    // Internal high-speed oscillator\n    HSOSC hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));\n    \n    // Simple clock divider\n    always_ff @(posedge int_osc)\n        begin\n            counter &lt;= counter + P;\n        end\n    \n    xor x1(led[0],s[1],s[0]);\n    and a1(led[1],s[3],s[2]);\n    \n    assign led[2] = counter[31];\n    \n\nendmodule\nThree led takes in an input of four switches, s[3:0], and turns on or off leds, led[2:0]."
+  },
+  {
+    "objectID": "labs/lab2/lab2.html#test_bench",
+    "href": "labs/lab2/lab2.html#test_bench",
+    "title": "Lab 2",
+    "section": "test_bench ",
+    "text": "test_bench \n Link to Test Bench File"
+  },
+  {
+    "objectID": "labs/lab2/lab2.html#seven_testbench",
+    "href": "labs/lab2/lab2.html#seven_testbench",
+    "title": "Lab 2",
+    "section": "seven_testbench ",
+    "text": "seven_testbench \n Link to Test Bench File"
+  },
+  {
+    "objectID": "labs/lab2/lab2.html#three_testbench",
+    "href": "labs/lab2/lab2.html#three_testbench",
+    "title": "Lab 2",
+    "section": "three_testbench ",
+    "text": "three_testbench \n Link to Test Bench File"
+  },
+  {
+    "objectID": "labs/lab2/lab2.html#clock_divider",
+    "href": "labs/lab2/lab2.html#clock_divider",
+    "title": "Lab 2",
+    "section": "clock_divider ",
+    "text": "clock_divider \n/*\nTitle: clock_divider\nAuthor: Kanoa Parker\nEmail: kanparker@g.hmc.edu\nDate: 9/9/2024\nDescription: Takes in the standard oscillator adn divides the clock using a counter to produce a clock at desired frequency\n*/\n\nmodule clock_divider(\n    output clk\n);\n    \n    logic int_osc;\n    logic pulse;\n    logic led_state = 0;\n    logic [31:0] counter = 0;\n    logic [31:0] P;\n    \n    assign P = 32'b00000000000000010101111110010000;\n    \n    // Internal high-speed oscillator\n    HSOSC hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));\n    \n    // Simple clock divider\n    always_ff @(posedge int_osc)\n        begin\n            counter &lt;= counter + P;\n        end\n    assign clk = counter[31];\n        \nendmodule\nTakes in the standard oscillator adn divides the clock using a counter to produce a clock at desired frequency."
+  },
+  {
+    "objectID": "labs/lab2/lab2.html#code-ai-provided-first-try",
+    "href": "labs/lab2/lab2.html#code-ai-provided-first-try",
+    "title": "Lab 2",
+    "section": "Code AI Provided first try",
+    "text": "Code AI Provided first try\nmodule time_multiplexed_decoder (\n    input logic clk,               // Clock signal\n    input logic rst_n,             // Active-low reset signal\n    input logic [3:0] input_bits_1, // First set of 4-bit input\n    input logic [3:0] input_bits_2, // Second set of 4-bit input\n    output logic [6:0] seg_out_1,   // 7-segment output for the first set\n    output logic [6:0] seg_out_2    // 7-segment output for the second set\n);\n\n    // 7-segment display encoding for common anode (active low segments)\n    // Assuming the 7 segments are ordered as ABCDEF-G\n    logic [6:0] seven_seg_decoder [15:0] = {\n        7'b1111110,  // 0\n        7'b0110000,  // 1\n        7'b1101101,  // 2\n        7'b1111001,  // 3\n        7'b0110011,  // 4\n        7'b1011011,  // 5\n        7'b1011111,  // 6\n        7'b1110000,  // 7\n        7'b1111111,  // 8\n        7'b1111011,  // 9\n        7'b1110111,  // A\n        7'b0011111,  // B\n        7'b1001110,  // C\n        7'b0111101,  // D\n        7'b1001111,  // E\n        7'b1000111   // F\n    };\n\n    // Internal signals for multiplexing control\n    logic mux_ctrl;  // Control signal to alternate between the two sets\n\n    // Time multiplexing logic to alternate between the two sets of inputs\n    always_ff @(posedge clk or negedge rst_n) begin\n        if (!rst_n) begin\n            mux_ctrl &lt;= 0;  // Reset control signal\n        end else begin\n            mux_ctrl &lt;= ~mux_ctrl;  // Toggle the control signal\n        end\n    end\n\n    // Drive the seven-segment display outputs based on the multiplexed input\n    always_comb begin\n        if (mux_ctrl) begin\n            // Decode the first set of input bits\n            seg_out_1 = seven_seg_decoder[input_bits_1];\n            seg_out_2 = 7'b1111111;  // Turn off second display\n        end else begin\n            // Decode the second set of input bits\n            seg_out_2 = seven_seg_decoder[input_bits_2];\n            seg_out_1 = 7'b1111111;  // Turn off first display\n        end\n    end\n\nendmodule\nThis code was provided without my files. It all compiled and this is the netlist analyzer \n##Code AI provided given my files\n// timescale optional for simulation\n`timescale 1ns/1ps\n\n// Time-multiplex one seven-seg decoder across two inputs to drive two 7-bit busses.\n// Assumes your decoder module is named `seven_seg_display` with ports .s[3:0] and .seg[6:0],\n// and that your clock source is `clock_divider` with port .clk.\nmodule sevenseg_dual_mux #(\n    // If your seven-seg is common-anode (active-low segments), leave ACTIVE_LOW=1.\n    // If it’s common-cathode (active-high segments), set ACTIVE_LOW=0.\n    parameter bit ACTIVE_LOW = 1\n) (\n    input  logic [3:0] s1,        // first 4-bit value\n    input  logic [3:0] s2,        // second 4-bit value\n    output logic [6:0] seg1,      // seven outputs for display 1\n    output logic [6:0] seg2       // seven outputs for display 2\n);\n\n    // -------------------------------------------------------------------------\n    // Clock to flip which input is shown (multiplex rate is set inside clock_divider)\n    // -------------------------------------------------------------------------\n    logic clk_mux;\n    clock_divider u_div (.clk(clk_mux));\n\n    // -------------------------------------------------------------------------\n    // Shared decoder: one instance, two inputs selected by a toggle\n    // -------------------------------------------------------------------------\n    logic        sel;          // which input is currently active\n    logic [3:0]  nibble;       // goes into the shared decoder\n    logic [6:0]  seg_raw;      // comes out of the shared decoder\n\n    // Simple toggle at the divided clock to alternate inputs\n    always_ff @(posedge clk_mux) begin\n        sel &lt;= ~sel;\n    end\n\n    // The single decoder\n    seven_seg_display u_dec (\n        .s   (nibble),\n        .seg (seg_raw)\n    );\n\n    // -------------------------------------------------------------------------\n    // Demultiplex the decoded segments to two 7-bit outputs.\n    // The non-selected display is driven \"blank\" to avoid ghosting.\n    // For active-low segments, \"blank\" = all 1s; for active-high, \"blank\" = all 0s.\n    // -------------------------------------------------------------------------\n    localparam logic [6:0] BLANK = (ACTIVE_LOW) ? 7'b111_1111 : 7'b000_0000;\n\n    always_comb begin\n        // Default blank both\n        seg1  = BLANK;\n        seg2  = BLANK;\n\n        // Select which input feeds the decoder\n        nibble = sel ? s1 : s2;\n\n        // And route the decoder outputs to the selected display\n        if (sel) begin\n            seg1 = seg_raw;\n        end else begin\n            seg2 = seg_raw;\n        end\n    end\n\nendmodule\nCode failed with error “0Runing Export Files failed”"
   }
 ]
