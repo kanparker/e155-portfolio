@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Kanoa Parker">
-<meta name="description" content="Lab 2">
+<meta name="dcterms.date" content="2025-09-09">
+<meta name="description" content="Programming a Dual Seven Segment display controlled by 2 sets of 4 dipswitches. Using a time multiplexer the inputs from four switches control one half of the display. In addition 5 leds indicate the sum of the two sets of 4 dip switches.">
 
 <title>Lab 2 – E155 Portfolio</title>
 <style>
@@ -21,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -118,8 +154,32 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#table-of-contents" id="toc-table-of-contents" class="nav-link active" data-scroll-target="#table-of-contents">Table of Contents</a></li>
+  <li><a href="#this-it-the-introduction" id="toc-this-it-the-introduction" class="nav-link" data-scroll-target="#this-it-the-introduction">This it the Introduction </a><a name="introdction" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#schematic" id="toc-schematic" class="nav-link" data-scroll-target="#schematic">Schematic </a><a name="Schematic" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#block-diagram" id="toc-block-diagram" class="nav-link" data-scroll-target="#block-diagram">Block Diagram </a><a name="block_diagram" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#verilog-code" id="toc-verilog-code" class="nav-link" data-scroll-target="#verilog-code">Verilog Code </a><a name="verilog_code" class="nav-link" data-scroll-target="undefined"></a>
+  <ul class="collapse">
+  <li><a href="#top" id="toc-top" class="nav-link" data-scroll-target="#top">top </a><a name="topmod" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#seven_segment_display" id="toc-seven_segment_display" class="nav-link" data-scroll-target="#seven_segment_display">seven_segment_display </a><a name="sevenseg" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#clock_divider" id="toc-clock_divider" class="nav-link" data-scroll-target="#clock_divider">clock_divider </a><a name="slowclock" class="nav-link" data-scroll-target="undefined"></a></li>
+  </ul></li>
+  <li><a href="#test-benches" id="toc-test-benches" class="nav-link" data-scroll-target="#test-benches">Test Benches </a><a name="test_benches" class="nav-link" data-scroll-target="undefined"></a>
+  <ul class="collapse">
+  <li><a href="#test_bench" id="toc-test_bench" class="nav-link" data-scroll-target="#test_bench">test_bench </a><a name="test_bench" class="nav-link" data-scroll-target="undefined"></a></li>
+  <li><a href="#seven_testbench" id="toc-seven_testbench" class="nav-link" data-scroll-target="#seven_testbench">seven_testbench </a><a name="seven_tb" class="nav-link" data-scroll-target="undefined"></a></li>
+  </ul></li>
+  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes </a><a name="notes_extra" class="nav-link" data-scroll-target="undefined"></a>
+  <ul class="collapse">
+  <li><a href="#code-ai-provided-first-try" id="toc-code-ai-provided-first-try" class="nav-link" data-scroll-target="#code-ai-provided-first-try">Code AI Provided first try</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -131,7 +191,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div>
   <div class="description">
-    Lab 2
+    Programming a Dual Seven Segment display controlled by 2 sets of 4 dipswitches. Using a time multiplexer the inputs from four switches control one half of the display. In addition 5 leds indicate the sum of the two sets of 4 dip switches.
   </div>
 </div>
 
@@ -148,7 +208,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 29, 205</p>
+      <p class="date">September 9, 2025</p>
     </div>
   </div>
   
@@ -160,9 +220,357 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Lab 2 tbd</p>
+<section id="table-of-contents" class="level1">
+<h1>Table of Contents</h1>
+<ol type="1">
+<li><p><a href="#introduction">Introduction</a></p></li>
+<li><p><a href="#Schematic">Schematic</a></p></li>
+<li><p><a href="#block_diagram">Block Diagram</a></p></li>
+<li><p><a href="#verilog_code">Verilog Code</a> 4.1 <a href="#topmod">top</a> 4.2 <a href="#sevenseg">seven_seg_display</a> 4.3 <a href="#slowclock">clock_divider</a></p></li>
+<li><p><a href="#test_benches">Test Benches</a> 5.1 <a href="#test_bench">testbench</a> 5.2 <a href="#seven_tb">seven_testbench</a></p></li>
+<li><p><a href="#notes_extra">Notes</a></p></li>
+</ol>
+<p>7.<a href="#ai_prototype">AI Prototype</a></p>
+</section>
+<section id="this-it-the-introduction" class="level1">
+<h1>This it the Introduction <a name="introdction"></a></h1>
+<p>In this lab I using 2 sets of 4 dip switches I can control a dual seven segment display. One set of switches control the left digit while the other set control the other digit. This was accomplished using time multiplexing. In addition a set of 5 yellow LEDs indicated the sum of the two sets of dip switches in binary.</p>
+</section>
+<section id="schematic" class="level1">
+<h1>Schematic <a name="Schematic"></a></h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\lab2_schematic.jpg" class="img-fluid figure-img"></p>
+<figcaption>Schematic of Bread Board</figcaption>
+</figure>
+</div>
+</section>
+<section id="block-diagram" class="level1">
+<h1>Block Diagram <a name="block_diagram"></a></h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images\lab2_block_diagram.jpg" class="img-fluid figure-img"></p>
+<figcaption>Blcok Diagramof Verilog Code</figcaption>
+</figure>
+</div>
+</section>
+<section id="verilog-code" class="level1">
+<h1>Verilog Code <a name="verilog_code"></a></h1>
+<p>This section contains verilog code for modules top seven_segment_display and three_led</p>
+<section id="top" class="level2">
+<h2 class="anchored" data-anchor-id="top">top <a name="topmod"></a></h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">Title: top module for lab 2</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">Author: Kanoa Parker</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">Email: kanparker@g.hmc.edu</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">Date: 9/9/2024</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">Description: Top module for lab 2. Takes in inputs of 2 sets of 4 switches, s1 and s2. Outputs the sum of s1 and s2 as led. Using a time multiplexer the mux choses either to output either s1 or s2 as seg using seven_seg_display module. gate1 and gate1 go to transistor gates which control which set of leds get turned on.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> top<span class="op">(</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>s1<span class="op">,</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>s2<span class="op">,</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>seg<span class="op">,</span> </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">4</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>led<span class="op">,</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic gate1<span class="op">,</span> gate2<span class="op">,</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic clk</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">//s1 is inputs of one set of 4 dip swithces</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">//s2 is inputs of other set of 4 dip switches</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">//seg is the output to drive seven segment display</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// gate1 and gate2 go to base of BJT to control power to seven segment display</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">// clk is output used for testing</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">//sev_seg_in is the input to seven_seg_display module</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>sev_seg_in<span class="op">;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">//sev_seg_out is the output of seven_seg_display module</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>sev_seg_out<span class="op">;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">//instancing seven_seg_display</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    seven_seg_display seven_seg_counter<span class="op">(</span>sev_seg_in<span class="op">,</span>seg<span class="op">);</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">//instancing clock divider</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    clock_divider slow_clock<span class="op">(</span>clk<span class="op">);</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">//muxing between s1 and s2</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    always_comb</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        <span class="kw">case</span><span class="op">(</span>clk<span class="op">)</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>            <span class="bn">1'b1</span><span class="op">:</span> <span class="kw">begin</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                    sev_seg_in <span class="op">=</span> s1<span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">];</span> </span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>                    gate1 <span class="op">=</span> <span class="bn">1'b1</span><span class="op">;</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>                    gate2 <span class="op">=</span><span class="bn">1'b0</span><span class="op">;</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>                <span class="kw">end</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>            <span class="bn">1'b0</span><span class="op">:</span> <span class="kw">begin</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>                    sev_seg_in <span class="op">=</span> s2<span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>                    gate1 <span class="op">=</span> <span class="bn">1'b0</span><span class="op">;</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>                    gate2 <span class="op">=</span> <span class="bn">1'b1</span><span class="op">;</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>                <span class="kw">end</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>        <span class="kw">endcase</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="co">//sum of s1 and s2 to led   </span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        <span class="kw">assign</span> led <span class="op">=</span> s1 <span class="op">+</span> s2<span class="op">;</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Top module for lab 2. Takes in inputs of 2 sets of 4 switches, s1 and s2. Outputs the sum of s1 and s2 as led. Using a time multiplexer the mux choses either to output either s1 or s2 as seg using seven_seg_display module. gate1 and gate1 go to transistor gates which control which set of leds get turned on.</p>
+</section>
+<section id="seven_segment_display" class="level2">
+<h2 class="anchored" data-anchor-id="seven_segment_display">seven_segment_display <a name="sevenseg"></a></h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">Title: seven_seg_display</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">Author: Kanoa Parker</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">Email: kanparker@g.hmc.edu</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">Date: 9/9/2024</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">Description: Takes in 4 switch inputs and outputs control signal for a seven segment display</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> seven_seg_display<span class="op">(</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span>   logic   <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>s<span class="op">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span>  logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>seg</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">//logic used for old boolean algebra method</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    logic A<span class="op">,</span>B<span class="op">,</span>C<span class="op">,</span>D<span class="op">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> A <span class="op">=</span> s<span class="op">[</span><span class="dv">3</span><span class="op">];</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> B <span class="op">=</span> s<span class="op">[</span><span class="dv">2</span><span class="op">];</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> C <span class="op">=</span> s<span class="op">[</span><span class="dv">1</span><span class="op">];</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> D <span class="op">=</span> s<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">//old boolean algrebra method</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">/*</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">    assign seg[6] = (~A&amp;~C)&amp;(B^D) | A&amp;(~B&amp;C&amp;D | B&amp;~C);</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">    assign seg[5] = D&amp;~(A^C) | B&amp;(C&amp;~D | A&amp;~C&amp;~D);</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">    assign seg[4] = ~A&amp;~B&amp;C&amp;~D | (A&amp;B)&amp;( ~C&amp;~D | C);</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">    assign seg[3] = (~A&amp;D)&amp; ~(B^C) | (A&amp;~B)&amp;(C^D) | B&amp;( ~(A|C|D) | A&amp;C&amp;D);</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">    assign seg[2] = (~A&amp;~B&amp;D) | (~A&amp;B&amp;~C) | (~A&amp;B&amp;C&amp;D) | (A&amp;~B&amp;~C&amp;D);</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">    assign seg[1] = (~(A|B|C) &amp; D) | (~A&amp;~B&amp;C) | (~A&amp;B&amp;C&amp;D) | (A&amp;B&amp;~C);</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">    assign seg[0] = ~(A|B|C|D) | (~A&amp;~B&amp;~C&amp;D) | (~A&amp;B&amp;C&amp;D);</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">    */</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">//case statement that map input to output</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    always_comb</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        <span class="kw">case</span><span class="op">(</span>s<span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">])</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// 0</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b0000</span><span class="op">:</span> seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b0000001</span><span class="op">;</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// 1</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b0001</span><span class="op">:</span> seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b1001111</span><span class="op">;</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// 2</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b0010</span><span class="op">:</span> seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b0010010</span><span class="op">;</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// 3</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b0011</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b0000110</span><span class="op">;</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// 4</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b0100</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b1001100</span><span class="op">;</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// 5</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b0101</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b0100100</span><span class="op">;</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// 6</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b0110</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b0100000</span><span class="op">;</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// 7</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b0111</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b0001111</span><span class="op">;</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// 8</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b1000</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b0000000</span><span class="op">;</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// 9</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b1001</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b0001100</span><span class="op">;</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// A</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b1010</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b0001000</span><span class="op">;</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// B</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b1011</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b1100000</span><span class="op">;</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// C</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b1100</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b0110001</span><span class="op">;</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// D</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b1101</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b1000010</span><span class="op">;</span></span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// E</span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b1110</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b0110000</span><span class="op">;</span></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>            <span class="co">/// F</span></span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>            <span class="bn">4'b1111</span><span class="op">:</span>seg<span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="bn">7'b0111000</span><span class="op">;</span></span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>        <span class="kw">endcase</span></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>    <span class="co">//see notes for segment conrispondice to led</span></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Seven segment display takes an input of four switches, s[3:0], and ouputs to light up the seven segment display, seg[6:0]</p>
+</section>
+<section id="clock_divider" class="level2">
+<h2 class="anchored" data-anchor-id="clock_divider">clock_divider <a name="slowclock"></a></h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">Title: clock_divider</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">Author: Kanoa Parker</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">Email: kanparker@g.hmc.edu</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">Date: 9/9/2024</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">Description: Takes in the standard oscillator adn divides the clock using a counter to produce a clock at desired frequency</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> clock_divider<span class="op">(</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> clk</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    logic int_osc<span class="op">;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    logic pulse<span class="op">;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    logic led_state <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">31</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> counter <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">31</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> P<span class="op">;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> P <span class="op">=</span> <span class="bn">32'b00000000000000010101111110010000</span><span class="op">;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Internal high-speed oscillator</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    HSOSC hf_osc <span class="op">(</span>.CLKHFPU<span class="op">(</span><span class="bn">1'b1</span><span class="op">),</span> .CLKHFEN<span class="op">(</span><span class="bn">1'b1</span><span class="op">),</span> .CLKHF<span class="op">(</span>int_osc<span class="op">));</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Simple clock divider</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    always_ff <span class="op">@(</span><span class="kw">posedge</span> int_osc<span class="op">)</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        <span class="kw">begin</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>            counter <span class="op">&lt;=</span> counter <span class="op">+</span> P<span class="op">;</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">assign</span> clk <span class="op">=</span> counter<span class="op">[</span><span class="dv">31</span><span class="op">];</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Takes in the standard oscillator adn divides the clock using a counter to produce a clock at desired frequency.</p>
+</section>
+</section>
+<section id="test-benches" class="level1">
+<h1>Test Benches <a name="test_benches"></a></h1>
+<section id="test_bench" class="level2">
+<h2 class="anchored" data-anchor-id="test_bench">test_bench <a name="test_bench"></a></h2>
+<p><img src="images\lab2_top_testbench.png" class="img-fluid" alt="Full Test Bench Sim Results"> <a href="https://github.com/kanparker/e155-lab2/blob/main/src/e155_lab2/testbench_lab2.sv">Link to Test Bench File</a></p>
+</section>
+<section id="seven_testbench" class="level2">
+<h2 class="anchored" data-anchor-id="seven_testbench">seven_testbench <a name="seven_tb"></a></h2>
+<p><img src="images\seven_lab2.png" class="img-fluid" alt="Full Test Bench Sim Results"> <a href="https://github.com/kanparker/e155-lab2/blob/main/src/e155_lab2/source/impl_1/testbench_seven_lab2.sv">Link to Test Bench File</a></p>
+</section>
+</section>
+<section id="notes" class="level1">
+<h1>Notes <a name="notes_extra"></a></h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/lab2_notes.jpg" class="img-fluid figure-img"></p>
+<figcaption>LED calculations</figcaption>
+</figure>
+</div>
+<p>#AI Prototype <a name="ai_prototype"></a></p>
+<section id="code-ai-provided-first-try" class="level2">
+<h2 class="anchored" data-anchor-id="code-ai-provided-first-try">Code AI Provided first try</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> time_multiplexed_decoder <span class="op">(</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic clk<span class="op">,</span>               <span class="co">// Clock signal</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic rst_n<span class="op">,</span>             <span class="co">// Active-low reset signal</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> input_bits_1<span class="op">,</span> <span class="co">// First set of 4-bit input</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span> logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> input_bits_2<span class="op">,</span> <span class="co">// Second set of 4-bit input</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> seg_out_1<span class="op">,</span>   <span class="co">// 7-segment output for the first set</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> seg_out_2    <span class="co">// 7-segment output for the second set</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// 7-segment display encoding for common anode (active low segments)</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Assuming the 7 segments are ordered as ABCDEF-G</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> seven_seg_decoder <span class="op">[</span><span class="dv">15</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b1111110</span><span class="op">,</span>  <span class="co">// 0</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b0110000</span><span class="op">,</span>  <span class="co">// 1</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b1101101</span><span class="op">,</span>  <span class="co">// 2</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b1111001</span><span class="op">,</span>  <span class="co">// 3</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b0110011</span><span class="op">,</span>  <span class="co">// 4</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b1011011</span><span class="op">,</span>  <span class="co">// 5</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b1011111</span><span class="op">,</span>  <span class="co">// 6</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b1110000</span><span class="op">,</span>  <span class="co">// 7</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b1111111</span><span class="op">,</span>  <span class="co">// 8</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b1111011</span><span class="op">,</span>  <span class="co">// 9</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b1110111</span><span class="op">,</span>  <span class="co">// A</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b0011111</span><span class="op">,</span>  <span class="co">// B</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b1001110</span><span class="op">,</span>  <span class="co">// C</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b0111101</span><span class="op">,</span>  <span class="co">// D</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b1001111</span><span class="op">,</span>  <span class="co">// E</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        <span class="bn">7'b1000111</span>   <span class="co">// F</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Internal signals for multiplexing control</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    logic mux_ctrl<span class="op">;</span>  <span class="co">// Control signal to alternate between the two sets</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Time multiplexing logic to alternate between the two sets of inputs</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    always_ff <span class="op">@(</span><span class="kw">posedge</span> clk <span class="dt">or</span> <span class="kw">negedge</span> rst_n<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(!</span>rst_n<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>            mux_ctrl <span class="op">&lt;=</span> <span class="dv">0</span><span class="op">;</span>  <span class="co">// Reset control signal</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span> <span class="kw">else</span> <span class="kw">begin</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>            mux_ctrl <span class="op">&lt;=</span> <span class="op">~</span>mux_ctrl<span class="op">;</span>  <span class="co">// Toggle the control signal</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Drive the seven-segment display outputs based on the multiplexed input</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    always_comb <span class="kw">begin</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(</span>mux_ctrl<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Decode the first set of input bits</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>            seg_out_1 <span class="op">=</span> seven_seg_decoder<span class="op">[</span>input_bits_1<span class="op">];</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>            seg_out_2 <span class="op">=</span> <span class="bn">7'b1111111</span><span class="op">;</span>  <span class="co">// Turn off second display</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span> <span class="kw">else</span> <span class="kw">begin</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Decode the second set of input bits</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>            seg_out_2 <span class="op">=</span> seven_seg_decoder<span class="op">[</span>input_bits_2<span class="op">];</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>            seg_out_1 <span class="op">=</span> <span class="bn">7'b1111111</span><span class="op">;</span>  <span class="co">// Turn off first display</span></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This code was provided without my files. It all compiled and this is the netlist analyzer <img src="images/netlistlab2ai.png" class="img-fluid" alt="NetlsitAI"></p>
+<p>##Code AI provided given my files</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// timescale optional for simulation</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ot">`timescale 1ns/1ps</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Time-multiplex one seven-seg decoder across two inputs to drive two 7-bit busses.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Assumes your decoder module is named `seven_seg_display` with ports .s[3:0] and .seg[6:0],</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">// and that your clock source is `clock_divider` with port .clk.</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> sevenseg_dual_mux #<span class="op">(</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// If your seven-seg is common-anode (active-low segments), leave ACTIVE_LOW=1.</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// If it’s common-cathode (active-high segments), set ACTIVE_LOW=0.</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">parameter</span> bit ACTIVE_LOW <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="op">)</span> <span class="op">(</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span>  logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> s1<span class="op">,</span>        <span class="co">// first 4-bit value</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">input</span>  logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> s2<span class="op">,</span>        <span class="co">// second 4-bit value</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> seg1<span class="op">,</span>      <span class="co">// seven outputs for display 1</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> seg2       <span class="co">// seven outputs for display 2</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// -------------------------------------------------------------------------</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Clock to flip which input is shown (multiplex rate is set inside clock_divider)</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">// -------------------------------------------------------------------------</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    logic clk_mux<span class="op">;</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    clock_divider u_div <span class="op">(</span>.clk<span class="op">(</span>clk_mux<span class="op">));</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">// -------------------------------------------------------------------------</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Shared decoder: one instance, two inputs selected by a toggle</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">// -------------------------------------------------------------------------</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    logic        sel<span class="op">;</span>          <span class="co">// which input is currently active</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">3</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>  nibble<span class="op">;</span>       <span class="co">// goes into the shared decoder</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span>  seg_raw<span class="op">;</span>      <span class="co">// comes out of the shared decoder</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Simple toggle at the divided clock to alternate inputs</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    always_ff <span class="op">@(</span><span class="kw">posedge</span> clk_mux<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>        sel <span class="op">&lt;=</span> <span class="op">~</span>sel<span class="op">;</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    <span class="co">// The single decoder</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    seven_seg_display u_dec <span class="op">(</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>        .s   <span class="op">(</span>nibble<span class="op">),</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>        .seg <span class="op">(</span>seg_raw<span class="op">)</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>    <span class="co">// -------------------------------------------------------------------------</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Demultiplex the decoded segments to two 7-bit outputs.</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    <span class="co">// The non-selected display is driven "blank" to avoid ghosting.</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="co">// For active-low segments, "blank" = all 1s; for active-high, "blank" = all 0s.</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>    <span class="co">// -------------------------------------------------------------------------</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>    <span class="dt">localparam</span> logic <span class="op">[</span><span class="dv">6</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> BLANK <span class="op">=</span> <span class="op">(</span>ACTIVE_LOW<span class="op">)</span> <span class="op">?</span> <span class="bn">7'b111_1111</span> <span class="op">:</span> <span class="bn">7'b000_0000</span><span class="op">;</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    always_comb <span class="kw">begin</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Default blank both</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>        seg1  <span class="op">=</span> BLANK<span class="op">;</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>        seg2  <span class="op">=</span> BLANK<span class="op">;</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Select which input feeds the decoder</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>        nibble <span class="op">=</span> sel <span class="op">?</span> s1 <span class="op">:</span> s2<span class="op">;</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>        <span class="co">// And route the decoder outputs to the selected display</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(</span>sel<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>            seg1 <span class="op">=</span> seg_raw<span class="op">;</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span> <span class="kw">else</span> <span class="kw">begin</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>            seg2 <span class="op">=</span> seg_raw<span class="op">;</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Code failed with error “0Runing Export Files failed”</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
