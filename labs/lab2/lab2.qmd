@@ -12,6 +12,7 @@ date: "9/9/2025"
         4.1 [top](#topmod)
         4.2 [seven_seg_display](#sevenseg)
         4.3 [clock_divider](#slowclock)
+		4.4 [hsosc](#highspeed)
 5. [Test Benches](#test_benches)
     5.1 [testbench](#test_bench)
     5.2 [seven_testbench](#seven_tb)
@@ -24,12 +25,14 @@ date: "9/9/2025"
 # This it the Introduction <a name="introdction"></a>
 
 In this lab I using 2 sets of 4 dip switches I can control a dual seven segment display. One set of switches control the left digit while the other set control the other digit. This was accomplished using time multiplexing. In addition a set of 5 yellow LEDs indicated the sum of the two sets of dip switches in binary.
+Hours Spent: 8
+Lab Fufills all requirements.
 
 # Schematic <a name="Schematic"></a>
-![Schematic of Bread Board](images\lab2_schematic.jpg)
+![Schematic of Bread Board](images\lab2_schematic1.jpg)
 
 # Block Diagram <a name="block_diagram"></a>
-![Blcok Diagramof Verilog Code](images\lab2_block_diagram.jpg)
+![Blcok Diagramof Verilog Code](images\lab2_blkdiagram.jpg)
 
 # Verilog Code <a name="verilog_code"></a>
 This section contains verilog code for modules top seven_segment_display and three_led
@@ -180,31 +183,56 @@ Description: Takes in the standard oscillator adn divides the clock using a coun
 */
 
 module clock_divider(
-	output clk
-);
-	
-	logic int_osc;
-	logic pulse;
-	logic led_state = 0;
+	input logic clk, reset,
+	output logic slow_clk
+);	
 	logic [31:0] counter = 0;
 	logic [31:0] P;
 	
 	assign P = 32'b00000000000000010101111110010000;
 	
-	// Internal high-speed oscillator
-	HSOSC hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));
-	
+
 	// Simple clock divider
-	always_ff @(posedge int_osc)
-		begin
+	always_ff @(posedge clk, reset)
+		if(reset) begin
+				counter<=0;
+				slow_clk<=0;
+			end
+		else begin
 			counter <= counter + P;
 		end
-	assign clk = counter[31];
+	assign slow_clk = counter[31];
 		
 endmodule
 ```
 
 Takes in the standard oscillator adn divides the clock using a counter to produce a clock at desired frequency.
+
+## hsosc    <a name="highspeed"></a>
+```verilog
+/*
+Title: hsosc
+Author: Kanoa Parker
+Email: kanparker@g.hmc.edu
+Date: 9/9/2024
+Description: high speed oscillator
+*/
+module hsosc(
+	output logic clk
+);
+
+	logic int_osc;
+	logic pulse;
+	logic led_state = 0;
+	
+	// Internal high-speed oscillator
+	HSOSC hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));
+	
+	assign clk = int_osc;
+
+endmodule
+```
+Verilog code generates a high speed oscillator
 
 # Test Benches <a name="test_benches"></a>
 
@@ -217,7 +245,8 @@ Takes in the standard oscillator adn divides the clock using a counter to produc
 ![Full Test Bench Sim Results](images\seven_lab2.png)
 [Link to Test Bench File](https://github.com/kanparker/e155-lab2/blob/main/src/e155_lab2/source/impl_1/testbench_seven_lab2.sv)
 
-
+##Oscilliscope Trace
+![Oscilliscope Trace](images\osctrace.png)
 
 # Notes <a name="notes_extra"></a>
 ![LED calculations](images/lab2_notes.jpg)
@@ -284,7 +313,7 @@ module time_multiplexed_decoder (
 endmodule
 ```
 This code was provided without my files. It all compiled and this is the netlist analyzer
-![NetlsitAI](images/netlistlab2ai.png)
+![NetlsitAI](images/nestlistlab2ai.png)
 
 ##Code AI provided given my files
 ```verilog
@@ -358,3 +387,12 @@ endmodule
 
 
 Code failed with error "0Runing Export Files failed"
+
+##Conlcusion for AI Prototype
+On the first attempt with the AI to write the multiplexer it did a relatively good job. The code that it provided did complie how ever the design was clearly done by AI.
+The AI attempted to put all of the necassry components into one module. This is easy for the AI to do cause it can more easily track all the components and 
+does take into design aspects such as modularity and testing. In addition the AI designed the system such that one display is on and the other is turned off. This works but doesnt
+take into account that a switch could be used instead to turn off the display.
+
+The second attempt did not compile. It appears to attempt a similar architecutre as the one I designed with a single mux instead of two as in the previous attempt. However it
+is still all one module.
