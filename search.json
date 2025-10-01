@@ -98,11 +98,46 @@
     "text": "Max Min Frequency \n ## Error   # Notes"
   },
   {
-    "objectID": "labs/lab4/lab4.html#code-ai-provided-first-try",
-    "href": "labs/lab4/lab4.html#code-ai-provided-first-try",
+    "objectID": "labs/lab4/lab4.html#which-timers-can-you-use",
+    "href": "labs/lab4/lab4.html#which-timers-can-you-use",
     "title": "Lab 4",
-    "section": "Code AI Provided first try",
-    "text": "Code AI Provided first try"
+    "section": "1. Which timers can you use?",
+    "text": "1. Which timers can you use?\nThe STM32L432KC has several general-purpose and advanced timers:\n\nTIM1 (advanced control, 16-bit, has complementary outputs, dead-time, etc.)\nTIM2 (general-purpose, 32-bit)\nTIM15, TIM16, TIM17 (16-bit, smaller general-purpose timers)\nLPTIM1, LPTIM2 (low-power timers, good for ultra-low-frequency and low-power applications, but less flexible for PWM).\n\n👉 For your use case (simple output waveforms at ~200 Hz–1 kHz):\n\nTIM2 is a great choice because it’s 32-bit, so you don’t need to worry about overflow.\nTIM1 or TIM15 are also good choices if you want direct PWM routing to GPIO pins with advanced features.\nIf you want the easiest connection to a GPIO pin, choose TIM2, TIM1, or TIM15, since they have well-documented alternate functions (AF) for output compare/PWM on pins."
+  },
+  {
+    "objectID": "labs/lab4/lab4.html#how-do-you-generate-the-frequency",
+    "href": "labs/lab4/lab4.html#how-do-you-generate-the-frequency",
+    "title": "Lab 4",
+    "section": "2. How do you generate the frequency?",
+    "text": "2. How do you generate the frequency?\nA timer frequency is controlled by three things:\n[ f_{out} = ]\nWhere:\n\n(f_{TIM}) = timer clock frequency (depends on APB prescaler — typically up to 80 MHz on STM32L432).\nPSC = prescaler register (TIMx_PSC)\nARR = auto-reload register (TIMx_ARR) → sets the period.\n\nIf you want a PWM (toggle a pin), you set an output compare mode (via TIMx_CCMR) and choose a duty cycle using the capture/compare register (TIMx_CCRx)."
+  },
+  {
+    "objectID": "labs/lab4/lab4.html#example-calculation",
+    "href": "labs/lab4/lab4.html#example-calculation",
+    "title": "Lab 4",
+    "section": "3. Example Calculation",
+    "text": "3. Example Calculation\nSuppose your system clock is 80 MHz and APB1 prescaler is 1 → so (f_{TIM} = 80 MHz).\nTarget frequency = 500 Hz.\n[ (PSC+1)(ARR+1) = = = 160{,}000]\nPick something convenient:\n\nPSC = 159 → (PSC+1) = 160\nARR = 999 → (ARR+1) = 1000 → Frequency = (80,MHz / (160 ) = 500,Hz).\n\nFor 220 Hz: [ (PSC+1)(ARR+1) = ] You might choose PSC = 359, ARR ≈ 1009 → ~220 Hz.\nFor 1 kHz: [ (PSC+1)(ARR+1) = = 80{,}000] PSC = 79, ARR = 999 → 1 kHz."
+  },
+  {
+    "objectID": "labs/lab4/lab4.html#key-registers-to-configure",
+    "href": "labs/lab4/lab4.html#key-registers-to-configure",
+    "title": "Lab 4",
+    "section": "4. Key Registers to Configure",
+    "text": "4. Key Registers to Configure\n\nEnable clock to timer\n\nRCC_APB1ENR1 (for TIM2, TIM15, etc.)\nRCC_APB2ENR (for TIM1).\n\nSet prescaler\n\nTIMx_PSC = value.\n\nSet auto-reload register (period)\n\nTIMx_ARR = value.\n\nEnable output compare/PWM mode\n\nConfigure TIMx_CCMR1 (or CCMR2 depending on channel).\nSet channel to PWM mode 1 or 2.\n\nSet duty cycle\n\nTIMx_CCRx = value (between 0 and ARR).\n\nEnable output pin\n\nConfigure GPIO pin to AF mode with the right AF mapping for your chosen timer/channel.\nSet TIMx_CCER bit to enable the channel output.\n\nEnable counter\n\nSet TIMx_CR1.CEN = 1."
+  },
+  {
+    "objectID": "labs/lab4/lab4.html#summary-recommendation",
+    "href": "labs/lab4/lab4.html#summary-recommendation",
+    "title": "Lab 4",
+    "section": "5. Summary Recommendation",
+    "text": "5. Summary Recommendation\n\nUse TIM2 if you want flexibility (32-bit, simple).\nUse TIM1 or TIM15 if you specifically want advanced PWM features (e.g., complementary outputs).\nConnect to GPIO via alternate function mapping (check STM32L432 datasheet for AF mappings).\n\n\n👉 If you’d like, I can write out a bare-metal register configuration example (C code) for, say, TIM2 CH1 on a specific GPIO pin (PA0), generating 500 Hz PWM. Do you want me to write out that code?"
+  },
+  {
+    "objectID": "labs/lab4/lab4.html#ai-reflection",
+    "href": "labs/lab4/lab4.html#ai-reflection",
+    "title": "Lab 4",
+    "section": "AI reflection",
+    "text": "AI reflection\nThe AI response compared to my own decision making was very similar. We both Identified that Timmers 15 could directly connect to gpio pins. However it doesn’t mention timmers 6 and 7.\nThe equation it gave were semi useful but was better was the foot note explaining how to program the pwm using output compare mode.\nIt has the same logic path as mine. However the way it tries to go is directly output the pwm wave to gpio pin. They miss parts about setting the polarity for the output enabling gpio pins and clocks."
   },
   {
     "objectID": "labs/lab2/lab2.html",
