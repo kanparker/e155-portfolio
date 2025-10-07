@@ -222,7 +222,7 @@ Takes in the standard oscillator adn divides the clock using a counter to produc
 # Notes <a name="notes_extra"></a>
 ![LED calculations](images/lab2_notes.jpg)
 
-#AI Prototype <a name="ai_prototype"></a>
+# AI Prototype <a name="ai_prototype"></a>
 
 ## Code AI Provided first try
 ```verilog

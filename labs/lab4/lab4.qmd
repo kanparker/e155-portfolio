@@ -1,8 +1,799 @@
 ---
 title: "Lab 4"
-description: "Lab 4"
+description: "Programming a STM32L432KC Microcontroller to output a PWM wave at specific freqeuncies and at specific durations in order to drive a speaker."
 author: "Kanoa Parker"
-date: "8/29/205"
+date: "9/30/2025"
+---
+# Table of Contents
+1. [Introduction](#introduction)
+2. [Schematic](#Schematic)
+4. [MCU Code](#mcucode)
+        4.1 [main](#mainmod)
+        4.2 [RCC Header](#RCCh)
+        4.3 [RCC C File](#RCCc)
+        4.4 [TIM 15 and TIM 16 Header](#tim1516h)
+        4.5 [TIM 15 and TIM 16 C File](#tim1516c)
+        4.6 [Flash Header](#flashh)
+        4.7 [Flash C File](#flashc)
+        4.8 [GPIO Header](#gpioh)
+        4.9 [GPIO C File](#gpioc)
+5. [Calculations](#calc)
+    5.1 [Max Min Delay](#delay)
+    5.2 [Max Min Frequency](#fre)
+    5.2 [Error](#eerror)
+    
+
+6. [Notes](#notes_extra)
+
+7.[AI Prototype](#ai_prototype)
+
+# This it the Introduction <a name="introdction"></a>
+
+In this Lab I used a STM32L43KC Microcontroller to produce PWM waves at specific frequencies in order to drive a 8 ohm speaker. In addition I programmed a delay timer so that the frequencies would be held for a
+specific amount of time. I wrote header files that pointed to specific registers on the STM32L43KC in order to turn on the clock, enable GPIO pins, and enable timers.
+
+The Lab Met all Specification.
+
+Total Time Spent: 10 hours
+
+# Schematic <a name="Schematic"></a>
+![Schematic of Bread Board](images\shematiclab4.jpg)
+
+
+# MCU Code <a name="mcucode"></a>
+This section contains verilog code for modules top seven_segment_display and three_led
+
+## main <a name="mainmod"></a>
+
+```C
+/*********************************************************************
+*                    SEGGER Microcontroller GmbH                     *
+*                        The Embedded Experts                        *
+**********************************************************************
+
+-------------------------- END-OF-HEADER -----------------------------
+
+File    : main.c
+Purpose : Main Header File to Play Song on 8 Ohm speaker
+Author: Kanoa Pakrer
+Email: kanparker@g.hmc.edu
+*/
+
+#include <stdio.h>
+
+/*********************************************************************
+*
+*       main()
+*
+*  Function description
+*   Application entry point.
+*/
+#include "C:\Users\kanoa\Documents\tutorial-clock-configuration\lib\STM32L432KC_RCC.h"
+#include "C:\Users\kanoa\Documents\tutorial-clock-configuration\lib\STM32L432KC_RCC.c"
+#include "C:\Users\kanoa\Documents\tutorial-clock-configuration\lib\STM32L432KC_TIM_15_16.h"
+#include "C:\Users\kanoa\Documents\tutorial-clock-configuration\lib\STM32L432KC_TIM_15_16.c"
+#include "C:\Users\kanoa\Documents\tutorial-clock-configuration\lib\STM32L432KC_GPIO.h"
+#include "C:\Users\kanoa\Documents\tutorial-clock-configuration\lib\STM32L432KC_GPIO.c"
+#include "C:\Users\kanoa\Documents\tutorial-clock-configuration\lib\STM32L432KC_FLASH.h"
+#include "C:\Users\kanoa\Documents\tutorial-clock-configuration\lib\STM32L432KC_FLASH.c"
+
+const int notes[][2] = {
+{659,	125},
+{623,	125},
+{659,	125},
+{623,	125},
+{659,	125},
+{494,	125},
+{587,	125},
+{523,	125},
+{440,	250},
+{  0,	125},
+{262,	125},
+{330,	125},
+{440,	125},
+{494,	250},
+{  0,	125},
+{330,	125},
+{416,	125},
+{494,	125},
+{523,	250},
+{  0,	125},
+{330,	125},
+{659,	125},
+{623,	125},
+{659,	125},
+{623,	125},
+{659,	125},
+{494,	125},
+{587,	125},
+{523,	125},
+{440,	250},
+{  0,	125},
+{262,	125},
+{330,	125},
+{440,	125},
+{494,	250},
+{  0,	125},
+{330,	125},
+{523,	125},
+{494,	125},
+{440,	250},
+{  0,	125},
+{494,	125},
+{523,	125},
+{587,	125},
+{659,	375},
+{392,	125},
+{699,	125},
+{659,	125},
+{587,	375},
+{349,	125},
+{659,	125},
+{587,	125},
+{523,	375},
+{330,	125},
+{587,	125},
+{523,	125},
+{494,	250},
+{  0,	125},
+{330,	125},
+{659,	125},
+{  0,	250},
+{659,	125},
+{1319,	125},
+{  0,	250},
+{623,	125},
+{659,	125},
+{  0,	250},
+{623,	125},
+{659,	125},
+{623,	125},
+{659,	125},
+{623,	125},
+{659,	125},
+{494,	125},
+{587,	125},
+{523,	125},
+{440,	250},
+{  0,	125},
+{262,	125},
+{330,	125},
+{440,	125},
+{494,	250},
+{  0,	125},
+{330,	125},
+{416,	125},
+{494,	125},
+{523,	250},
+{  0,	125},
+{330,	125},
+{659,	125},
+{623,	125},
+{659,	125},
+{623,	125},
+{659,	125},
+{494,	125},
+{587,	125},
+{523,	125},
+{440,	250},
+{  0,	125},
+{262,	125},
+{330,	125},
+{440,	125},
+{494,	250},
+{  0,	125},
+{330,	125},
+{523,	125},
+{494,	125},
+{440,	500},
+{  0,	0}};
+
+int main(void) {
+  configureFlash();
+  configureClock();
+  RCC->AHB2ENR |=(1<<0);
+  RCC->APB2ENR |= (1 << 16);
+  RCC->APB2ENR |= (1 << 17); // Enable TIM15 and TIM16 clocks
+  RCC->CFGR &= ~(1 << 13); // Set APB2 prescaler to /2
+  RCC->CFGR &= ~(1 << 7); // Set AHB prescaler to /1
+  pinMode(GPIOA, 0, GPIO_OUTPUT);
+  pinMode(GPIOA, 2, GPIO_OUTPUT);
+  digitalWrite(GPIOA, 0, GPIO_HIGH);
+  //pinMode(GPIOA,1,GPIO_ALT);
+  //pinMode(GPIOA,2,GPIO_ALT);
+  initTIM(TIM15,9);
+  initTIM(TIM16,799);
+  
+  
+    
+  
+  
+
+  
+  int length = sizeof(notes) / sizeof(notes[0]);
+
+  printf("%d\n", length);  // Prints 5
+  for(int i=0; i<length+1; i++){
+  uint32_t Frequency = notes[i][0];
+  uint32_t delay = notes[i][1];
+  printf("Frequency %d Delay %d\n", Frequency, delay);
+  
+  if(delay == 0){
+    break;
+  }
+  else{
+    PWM(TIM15,Frequency);
+    delay_millis(TIM16,TIM15,delay,Frequency,GPIOA,0);
+  }
+  }
+  
+  
+  
+  
+
+}
+
+/*************************** End of file ****************************/
+
+```
+
+
+
+## RCC Header <a name="RCCh"></a>
+
+```C
+// STM32L432KC_RCC.h
+// Header for RCC functions
+
+#ifndef STM32L4_RCC_H
+#define STM32L4_RCC_H
+
+#include <stdint.h>
+
+///////////////////////////////////////////////////////////////////////////////
+// Definitions
+///////////////////////////////////////////////////////////////////////////////
+
+#define __IO volatile
+
+// Base addresses
+#define RCC_BASE (0x40021000UL) // base address of RCC
+
+// PLL
+#define PLLSRC_HSI 0
+#define PLLSRC_HSE 1
+
+// Clock configuration
+#define SW_HSI  0
+#define SW_HSE  1
+#define SW_PLL  2
+
+/**
+  * @brief Reset and Clock Control
+  */
+
+typedef struct
+{
+  __IO uint32_t CR;          /*!< RCC clock control register,                                              Address offset: 0x00 */
+  __IO uint32_t ICSCR;       /*!< RCC internal clock sources calibration register,                         Address offset: 0x04 */
+  __IO uint32_t CFGR;        /*!< RCC clock configuration register,                                        Address offset: 0x08 */
+  __IO uint32_t PLLCFGR;     /*!< RCC system PLL configuration register,                                   Address offset: 0x0C */
+  __IO uint32_t PLLSAI1CFGR; /*!< RCC PLL SAI1 configuration register,                                     Address offset: 0x10 */
+  uint32_t      RESERVED;    /*!< Reserved,                                                                Address offset: 0x14 */
+  __IO uint32_t CIER;        /*!< RCC clock interrupt enable register,                                     Address offset: 0x18 */
+  __IO uint32_t CIFR;        /*!< RCC clock interrupt flag register,                                       Address offset: 0x1C */
+  __IO uint32_t CICR;        /*!< RCC clock interrupt clear register,                                      Address offset: 0x20 */
+  uint32_t      RESERVED0;   /*!< Reserved,                                                                Address offset: 0x24 */
+  __IO uint32_t AHB1RSTR;    /*!< RCC AHB1 peripheral reset register,                                      Address offset: 0x28 */
+  __IO uint32_t AHB2RSTR;    /*!< RCC AHB2 peripheral reset register,                                      Address offset: 0x2C */
+  __IO uint32_t AHB3RSTR;    /*!< RCC AHB3 peripheral reset register,                                      Address offset: 0x30 */
+  uint32_t      RESERVED1;   /*!< Reserved,                                                                Address offset: 0x34 */
+  __IO uint32_t APB1RSTR1;   /*!< RCC APB1 peripheral reset register 1,                                    Address offset: 0x38 */
+  __IO uint32_t APB1RSTR2;   /*!< RCC APB1 peripheral reset register 2,                                    Address offset: 0x3C */
+  __IO uint32_t APB2RSTR;    /*!< RCC APB2 peripheral reset register,                                      Address offset: 0x40 */
+  uint32_t      RESERVED2;   /*!< Reserved,                                                                Address offset: 0x44 */
+  __IO uint32_t AHB1ENR;     /*!< RCC AHB1 peripheral clocks enable register,                              Address offset: 0x48 */
+  __IO uint32_t AHB2ENR;     /*!< RCC AHB2 peripheral clocks enable register,                              Address offset: 0x4C */
+  __IO uint32_t AHB3ENR;     /*!< RCC AHB3 peripheral clocks enable register,                              Address offset: 0x50 */
+  uint32_t      RESERVED3;   /*!< Reserved,                                                                Address offset: 0x54 */
+  __IO uint32_t APB1ENR1;    /*!< RCC APB1 peripheral clocks enable register 1,                            Address offset: 0x58 */
+  __IO uint32_t APB1ENR2;    /*!< RCC APB1 peripheral clocks enable register 2,                            Address offset: 0x5C */
+  __IO uint32_t APB2ENR;     /*!< RCC APB2 peripheral clocks enable register,                              Address offset: 0x60 */
+  uint32_t      RESERVED4;   /*!< Reserved,                                                                Address offset: 0x64 */
+  __IO uint32_t AHB1SMENR;   /*!< RCC AHB1 peripheral clocks enable in sleep and stop modes register,      Address offset: 0x68 */
+  __IO uint32_t AHB2SMENR;   /*!< RCC AHB2 peripheral clocks enable in sleep and stop modes register,      Address offset: 0x6C */
+  __IO uint32_t AHB3SMENR;   /*!< RCC AHB3 peripheral clocks enable in sleep and stop modes register,      Address offset: 0x70 */
+  uint32_t      RESERVED5;   /*!< Reserved,                                                                Address offset: 0x74 */
+  __IO uint32_t APB1SMENR1;  /*!< RCC APB1 peripheral clocks enable in sleep mode and stop modes register 1, Address offset: 0x78 */
+  __IO uint32_t APB1SMENR2;  /*!< RCC APB1 peripheral clocks enable in sleep mode and stop modes register 2, Address offset: 0x7C */
+  __IO uint32_t APB2SMENR;   /*!< RCC APB2 peripheral clocks enable in sleep mode and stop modes register, Address offset: 0x80 */
+  uint32_t      RESERVED6;   /*!< Reserved,                                                                Address offset: 0x84 */
+  __IO uint32_t CCIPR;       /*!< RCC peripherals independent clock configuration register,                Address offset: 0x88 */
+  uint32_t      RESERVED7;   /*!< Reserved,                                                                Address offset: 0x8C */
+  __IO uint32_t BDCR;        /*!< RCC backup domain control register,                                      Address offset: 0x90 */
+  __IO uint32_t CSR;         /*!< RCC clock control & status register,                                     Address offset: 0x94 */
+  __IO uint32_t CRRCR;       /*!< RCC clock recovery RC register,                                          Address offset: 0x98 */
+} RCC_TypeDef;
+
+#define RCC ((RCC_TypeDef *) RCC_BASE)
+
+///////////////////////////////////////////////////////////////////////////////
+// Function prototypes
+///////////////////////////////////////////////////////////////////////////////
+
+void configurePLL(void);
+void configureClock(void);
+
+#endif
+```
+
+## RCC C File    <a name="RCCc"></a>
+```C 
+// STM32L432KC_RCC.c
+// Source code for RCC functions
+
+#include "STM32L432KC_RCC.h"
+
+void configurePLL(void) {
+    // Set clock to 80 MHz
+    // Output freq = (src_clk) * (N/M) / R
+    // (4 MHz) * (80/1) / 4 = 80 MHz
+    // M: 1, N: 80, R: 4
+    // Use MSI as PLLSRC
+
+    // Turn off PLL
+    RCC->CR &= ~(1 << 24);
+    
+    // Wait till PLL is unlocked (e.g., off)
+    while ((RCC->CR >> 25 & 1) != 0);
+
+    // Load configuration
+    // Set PLL SRC to MSI
+    RCC->PLLCFGR |= (1 << 0);
+    RCC->PLLCFGR &= ~(1 << 1);
+
+    // Set PLLN
+    RCC->PLLCFGR &= ~(0b11111111 << 8); // Clear all bits of PLLN
+    RCC->PLLCFGR |= (0b1010000 << 8); // |= 80
+    
+    // Set PLLM
+    RCC->PLLCFGR &= ~(0b111 << 4);  // Clear all bits
+    
+    // Set PLLR
+    RCC->PLLCFGR &= ~(1 << 26);
+    RCC->PLLCFGR |= (1 << 25);
+    
+    // Enable PLLR output
+    RCC->PLLCFGR |= (1 << 24);
+
+    // Enable PLL
+    RCC->CR |= (1 << 24);
+    
+    // Wait until PLL is locked
+    while ((RCC->CR >> 25 & 1) != 1);
+}
+
+void configureClock(void){
+    // Configure and turn on PLL
+    configurePLL();
+
+    // Select PLL as clock source
+    RCC->CFGR |= (0b11 << 0);
+    while(!((RCC->CFGR >> 2) & 0b11));
+}
+```
+## Tim 15 and 16 Header <a name="tim1516h"></a>
+
+```C 
+//STM32L432KC_TIM1516.h
+//Header for TIM1516 functions
+
+#ifndef STM32L4_TIM_15_16_H
+#define STM32L4_TIM_15_16_H
+
+#include <stdint.h>
+#include "STM32L432KC_GPIO.h" // Include GPIO header for GPIO type
+#define __IO volatile
+
+//Base Address
+#define TIM16_BASE (0x40014400UL)
+#define TIM15_BASE (0x40014000UL)
+
+//Bit Field
+
+typedef struct{
+  __IO uint32_t CR1; //0x00
+  __IO uint32_t CR2; //0x04
+  __IO uint32_t SMCR; //0x08
+  __IO uint32_t DIER; //0x0C
+  __IO uint32_t SR; //0x10
+  __IO uint32_t EGR; //0x14
+  __IO uint32_t CCMR1; //0x18
+  __IO uint32_t BLANK; //0x1C
+  __IO uint32_t CCER; //0x20
+  __IO uint32_t CNT; //0x24
+  __IO uint32_t PSC; //0x028
+  __IO uint32_t ARR; //0x2C
+  __IO uint32_t RCR; //0x30
+  __IO uint32_t CCR1; //0x34
+  __IO uint32_t CCR2; //0x38
+  __IO uint32_t BLANK1; //0x3C
+  __IO uint32_t BLANK2; //0x40
+  __IO uint32_t BDTR; //0x44
+  __IO uint32_t DCR; //0x48
+  __IO uint32_t DMAR; //0x4C
+  __IO uint32_t OR1; //0x50
+  __IO uint32_t BLANK3; //0x54
+  __IO uint32_t BLANK4; //0x5C
+  __IO uint32_t OR2; //0x60
+} TIM_1516_Typedef;
+
+#define TIM15 ((TIM_1516_Typedef *) TIM15_BASE)
+#define TIM16 ((TIM_1516_Typedef *) TIM16_BASE)
+
+void initTIM(TIM_1516_Typedef* TIMx,uint32_t PSC_VAL);
+void delay_millis(TIM_1516_Typedef * TIM1x, TIM_1516_Typedef * TIM2x,uint32_t ms,uint32_t Frequency,GPIO* GPIOx,int pin);
+void PWM(TIM_1516_Typedef* TIMx, uint32_t Frequency);
+
+#endif
+```
+
+## Tim 15 and 16 C File    <a name="tim1516c"></a>
+```C 
+// STM32L432KC_TIM_15_16.c
+// Source code for TIM functions
+
+#include "STM32L432KC_TIM_15_16.h"
+#include "STM32L432KC_RCC.h"
+#include "STM32L432KC_GPIO.h"
+
+void initTIM(TIM_1516_Typedef * TIMx,uint32_t PSC_VAL) {
+    TIMx->CR1 |=(1<<7); // Turn on ARPE
+    TIMx->PSC = PSC_VAL; // Prescaler value (40 MHz / (799 + 1) = 50 kHz)
+}
+
+void delay_millis(TIM_1516_Typedef * TIM1x, TIM_1516_Typedef * TIM2x,uint32_t ms,uint32_t Frequency,GPIO* GPIOx,int pin) {
+    TIM1x->ARR = ms*100; // Auto-reload value for ms delay (50 kHz clock) for PSC 799
+    printf("ARR is %lu\n",TIM1x->ARR);
+    TIM1x->EGR |= (1<<0); // Generate an update event 
+    TIM1x->SR &= ~(1<<0); // Clear interrupt flag
+    TIM1x->CR1 |= (1<<0); // Start timer
+
+    // Wait until the update interrupt flag is set
+    while (((TIM1x->SR >> 0) & 1) == 0){
+        if(Frequency!=0){
+            //printf("CNT is %lu, ARR is %lu\n",TIM2x->CNT,TIM2x->ARR);
+            if(TIM2x->CNT < TIM2x->ARR/2){
+                digitalWrite(GPIOx,pin,GPIO_HIGH);
+            }
+            else{
+                digitalWrite(GPIOx,pin,GPIO_LOW);
+            }
+        }   
+        else{
+            digitalWrite(GPIOx,pin,GPIO_LOW);
+        }
+    };
+
+    TIM1x->CR1 &= ~(1<<0); // Stop the time
+}
+
+
+void PWM(TIM_1516_Typedef * TIMx, uint32_t Frequency) {
+    TIMx->ARR = (8000000/(Frequency)); // Auto-reload value for ms delay (50 kHz clock)
+    TIMx->EGR |= (1<<0); // Generate an update event 
+    TIMx->SR &= ~(1<<0); // Clear interrupt flag
+    TIMx->CR1 |= (1<<0); // Start timer
+    printf("ARR is %lu\n",TIMx->ARR);
+    
+    
+
+    
+    
+
+
+}
+
+```
+## Flash Header <a name="flashh"></a>
+
+```
+// STM32L432KC_FLASH.h
+// Header for FLASH functions
+
+#ifndef STM32L4_FLASH_H
+#define STM32L4_FLASH_H
+
+#include <stdint.h>
+
+///////////////////////////////////////////////////////////////////////////////
+// Definitions
+///////////////////////////////////////////////////////////////////////////////
+
+#define __IO volatile
+
+// Base addresses for GPIO ports
+#define FLASH_BASE (0x40022000UL) // base address of RCC
+
+///////////////////////////////////////////////////////////////////////////////
+// Bitfield struct for GPIO
+///////////////////////////////////////////////////////////////////////////////
+
+typedef struct {
+  __IO uint32_t ACR;      /*!< FLASH access control register,   Address offset: 0x00 */
+  __IO uint32_t KEYR;     /*!< FLASH key register,              Address offset: 0x04 */
+  __IO uint32_t OPTKEYR;  /*!< FLASH option key register,       Address offset: 0x08 */
+  __IO uint32_t SR;       /*!< FLASH status register,           Address offset: 0x0C */
+  __IO uint32_t CR;       /*!< FLASH control register,          Address offset: 0x10 */
+  __IO uint32_t OPTCR;    /*!< FLASH option control register ,  Address offset: 0x14 */
+  __IO uint32_t OPTCR1;   /*!< FLASH option control register 1, Address offset: 0x18 */
+} FLASH_TypeDef;
+
+#define FLASH ((FLASH_TypeDef *) FLASH_BASE)
+
+///////////////////////////////////////////////////////////////////////////////
+// Function prototypes
+///////////////////////////////////////////////////////////////////////////////
+
+void configureFlash(void);
+
+#endif
+```
+
+## Flash C File    <a name="flashc"></a>
+```C 
+// STM32L432KC_FLASH.c
+// Source code for FLASH functions
+
+#include "STM32L432KC_FLASH.h"
+
+void configureFlash(void) {
+    FLASH->ACR |= (0b100); // Set to 4 waitstates
+    FLASH->ACR |= (1 << 8); // Turn on the ART
+}
+```
+## GPIO Header <a name="gpioh"></a>
+
+```C 
+// STM32L432KC_GPIO.h
+// Header for GPIO functions
+
+#ifndef STM32L4_GPIO_H
+#define STM32L4_GPIO_H
+
+#include <stdint.h> // Include stdint header
+
+///////////////////////////////////////////////////////////////////////////////
+// Definitions
+///////////////////////////////////////////////////////////////////////////////
+
+// Values for GPIO pins ("val" arguments)
+#define GPIO_LOW    0
+#define GPIO_HIGH   1
+
+// Base addresses for GPIO ports
+#define GPIOB_BASE  (0x48000400UL)
+#define GPIOA_BASE  (0x48000000UL)
+
+// Arbitrary GPIO functions for pinMode()
+#define GPIO_INPUT  0
+#define GPIO_OUTPUT 1
+#define GPIO_ALT    2
+#define GPIO_ANALOG 3
+
+///////////////////////////////////////////////////////////////////////////////
+// Bitfield struct for GPIO
+///////////////////////////////////////////////////////////////////////////////
+
+// GPIO register structs here
+typedef struct {
+    volatile uint32_t MODER;   // GPIO Offset 0x00 GPIO port mode register
+    volatile uint32_t OTYPER;  // GPIO Offset 0x04
+    volatile uint32_t OSPEEDR; // GPIO Offset 0x08
+    volatile uint32_t PURPDR;  // GPIO Offset 0x0C
+    volatile uint32_t IDR;     // GPIO Offset 0x10
+    volatile uint32_t ODR;     // GPIO Offset 0x14
+    volatile uint32_t BSRR;    // GPIO Offset 0x18
+    volatile uint32_t LCKR;    // GPIO Offset 0x1C
+    volatile uint32_t AFRL;    // GPIO Offset 0x20
+    volatile uint32_t AFRH;    // GPIO Offset 0x24
+} GPIO;
+
+// Pointers to GPIO-sized chunks of memory for each peripheral
+#define GPIOB ((GPIO *) GPIOB_BASE)
+#define GPIOA ((GPIO *) GPIOA_BASE)
+//#define GPIO GPIOB
+
+///////////////////////////////////////////////////////////////////////////////
+// Function prototypes
+///////////////////////////////////////////////////////////////////////////////
+
+void pinMode(GPIO* GPIOx,int pin, int function);
+
+int digitalRead(GPIO* GPIOx,int pin);
+
+void digitalWrite(GPIO* GPIOx,int pin, int val);
+
+void togglePin(GPIO* GPIOx,int pin);
+
+#endif
+```
+
+## GPIO C   <a name="gpioc"></a>
+```C
+// STM32L432KC_GPIO.c
+// Source code for GPIO functions
+
+#include "STM32L432KC_GPIO.h"
+
+void pinMode(GPIO* GPIOx,int pin, int function) {
+    switch(function) {
+        case GPIO_INPUT:
+            GPIOx->MODER &= ~(0b11 << 2*pin);
+            break;
+        case GPIO_OUTPUT:
+            GPIOx->MODER |= (0b1 << 2*pin);
+            GPIOx->MODER &= ~(0b1 << (2*pin+1));
+            break;
+        case GPIO_ALT:
+            //sets moder
+            GPIOx->MODER &= ~(0b1 << 2*pin);
+            GPIOx->MODER |= (0b1 << (2*pin+1));
+            //sets as push pull
+            //GPIOx->OTYPER |= (0b1 << pin); // Push-pull
+            GPIOx->AFRL |= (0b1110 << 4*pin); // Clear bits
+            break;
+        case GPIO_ANALOG:
+            GPIOx->MODER |= (0b11 << 2*pin);
+            break;
+    }
+}
+
+int digitalRead(GPIO* GPIOx,int pin) {
+    return ((GPIOx->IDR) >> pin) & 1;
+}
+
+void digitalWrite(GPIO* GPIOx,int pin, int val) {
+    if(val == GPIO_LOW)
+        GPIOx->ODR &= ~(1 << pin);
+    else
+    GPIOx->ODR |= (1 << pin);
+}
+
+void togglePin(GPIO* GPIOx,int pin) {
+    // Use XOR to toggle
+    GPIOx->ODR ^= (1 << pin);
+}
+```
+
+# Calculations <a name="calc"></a>
+## Max Min Frequency <a name="fre"></a>
+![Schematic of Bread Board](images\clock_calc.jpg)
+## Error <a name="eerror"></a>
+![Schematic of Bread Board](images\errorlab4.jpg)
+# Notes <a name="notes_extra"></a>
+
+# AI Prototype <a name="ai_prototype"></a>
+Good question — let’s go step by step for the **STM32L432KC** timers and your target range (**220 Hz–1 kHz**).
+
 ---
 
-Lab 4 tbd
+## 1. Which timers can you use?
+
+The **STM32L432KC** has several general-purpose and advanced timers:
+
+* **TIM1** (advanced control, 16-bit, has complementary outputs, dead-time, etc.)
+* **TIM2** (general-purpose, 32-bit)
+* **TIM15, TIM16, TIM17** (16-bit, smaller general-purpose timers)
+* **LPTIM1, LPTIM2** (low-power timers, good for ultra-low-frequency and low-power applications, but less flexible for PWM).
+
+👉 For your use case (simple output waveforms at ~200 Hz–1 kHz):
+
+* **TIM2** is a great choice because it’s 32-bit, so you don’t need to worry about overflow.
+* **TIM1** or **TIM15** are also good choices if you want direct PWM routing to GPIO pins with advanced features.
+* If you want the *easiest connection to a GPIO pin*, choose **TIM2, TIM1, or TIM15**, since they have well-documented alternate functions (AF) for output compare/PWM on pins.
+
+---
+
+## 2. How do you generate the frequency?
+
+A timer frequency is controlled by three things:
+
+[
+f_{out} = \frac{f_{TIM}}{(PSC+1)(ARR+1)}
+]
+
+Where:
+
+* (f_{TIM}) = timer clock frequency (depends on APB prescaler — typically up to 80 MHz on STM32L432).
+* **PSC** = prescaler register (`TIMx_PSC`)
+* **ARR** = auto-reload register (`TIMx_ARR`) → sets the period.
+
+If you want a PWM (toggle a pin), you set an **output compare mode** (via `TIMx_CCMR`) and choose a duty cycle using the **capture/compare register** (`TIMx_CCRx`).
+
+---
+
+## 3. Example Calculation
+
+Suppose your system clock is **80 MHz** and APB1 prescaler is 1 → so (f_{TIM} = 80 MHz).
+
+Target frequency = **500 Hz**.
+
+[
+(PSC+1)(ARR+1) = \frac{f_{TIM}}{f_{out}} = \frac{80 \times 10^6}{500} = 160{,}000
+]
+
+Pick something convenient:
+
+* PSC = 159 → (PSC+1) = 160
+* ARR = 999 → (ARR+1) = 1000
+  → Frequency = (80,MHz / (160 \times 1000) = 500,Hz).
+
+For 220 Hz:
+[
+(PSC+1)(ARR+1) = \frac{80e6}{220} \approx 363636
+]
+You might choose PSC = 359, ARR ≈ 1009 → ~220 Hz.
+
+For 1 kHz:
+[
+(PSC+1)(ARR+1) = \frac{80e6}{1000} = 80{,}000
+]
+PSC = 79, ARR = 999 → 1 kHz.
+
+---
+
+## 4. Key Registers to Configure
+
+1. **Enable clock to timer**
+
+   * `RCC_APB1ENR1` (for TIM2, TIM15, etc.)
+   * `RCC_APB2ENR` (for TIM1).
+
+2. **Set prescaler**
+
+   * `TIMx_PSC = value`.
+
+3. **Set auto-reload register (period)**
+
+   * `TIMx_ARR = value`.
+
+4. **Enable output compare/PWM mode**
+
+   * Configure `TIMx_CCMR1` (or CCMR2 depending on channel).
+   * Set channel to **PWM mode 1 or 2**.
+
+5. **Set duty cycle**
+
+   * `TIMx_CCRx = value` (between 0 and ARR).
+
+6. **Enable output pin**
+
+   * Configure GPIO pin to **AF mode** with the right AF mapping for your chosen timer/channel.
+   * Set `TIMx_CCER` bit to enable the channel output.
+
+7. **Enable counter**
+
+   * Set `TIMx_CR1.CEN = 1`.
+
+---
+
+## 5. Summary Recommendation
+
+* Use **TIM2** if you want flexibility (32-bit, simple).
+* Use **TIM1 or TIM15** if you specifically want advanced PWM features (e.g., complementary outputs).
+* Connect to GPIO via **alternate function mapping** (check STM32L432 datasheet for AF mappings).
+
+---
+
+👉 If you’d like, I can write out a **bare-metal register configuration example (C code)** for, say, TIM2 CH1 on a specific GPIO pin (PA0), generating 500 Hz PWM.
+Do you want me to write out that code?
+
+## AI reflection
+
+The AI response compared to my own decision making was very similar. We both Identified that Timmers 15 could directly connect to gpio pins. However it doesn't mention timmers 6 and 7.
+
+The equation it gave were semi useful but was better was the foot note explaining how to program the pwm using output compare mode.
+
+It has the same logic path as mine. However the way it tries to go is directly output the pwm wave to gpio pin. They miss parts about setting the polarity for the output enabling gpio pins and clocks.
+
