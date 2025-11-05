@@ -29,7 +29,7 @@ The Webserver displays the temperature in degrees Celsius and the number of bits
 Webserver to turn on and off an LED on the Microcontroller. The Lab Meets all specifications and took 9.5 hours to complete.
 
 # Schematic <a name="Schematic"></a>
-![Schematic of Bread Board](images\lab5_schematic.jpg)
+![Schematic of Bread Board](images\lab6schematic.jpg)
 This a schematic showing connections between the MCU, DS1722, and ESP8266
 
 # C Code <a name="c_code"></a>
@@ -441,6 +441,164 @@ void set_sensitivity(uint8_t sensitivity){
 
 
 
-# Comparison of Manual vs Interupts <a name="compare"></a>
+# Oscilliscope Capture of Sample SPI communication between DS1722 and MCU  <a name="samp_spi"></a>
+![Schematic of Bread Board](images\NewFi.png)
 
 # AI Prototype <a name="aip"></a>
+## Respone from Chatgpt HTML Code and rendered code
+![Rendered Website](images\chattempweb.png)
+
+Done — I created a single-file HTML page titled temperature-portal.html in the canvas (you can open it on the right).
+
+What’s included
+
+Clean, responsive UI with modern dark theme and accessible controls.
+
+Big live temperature readout (with unit) and a small sparkline showing recent history.
+
+Precision selector (0–3 decimals).
+
+LED control with animated indicator and buttons (sends via WebSocket if connected, falls back to POST /api/led).
+
+WebSocket connection input (editable) and Connect / Disconnect buttons.
+
+Demo mode to simulate sensor data if you don’t have a backend.
+
+Basic logs panel and keyboard shortcut (Space toggles demo).
+
+How to hook it up
+
+Edit the WebSocket URL in the “Connection” field (default ws://localhost:8080) and click Apply URL then Connect. WebSocket messages should be JSON like:
+
+{ "sensorId": "your-id", "temp": 23.12, "unit": "°C" }
+
+
+If you prefer HTTP polling, implement GET /api/temperature that returns { "temp": 23.12, "unit": "°C" }. The page polls that endpoint every ~1.5s when not using WebSocket.
+
+LED: WebSocket will receive { "led": true } when user toggles; otherwise the page attempts POST /api/led with {"led": true}.
+
+If you want, I can:
+
+Convert this into a React component/page (single-file) with Tailwind.
+
+Add authentication headers or an API-key flow.
+
+Wire up MQTT instead of WebSocket, or adapt payload formats.
+
+Tell me which of those (or anything else) you want next and I’ll update the file directly.
+
+## Temperature C Code 
+Here’s a clean and robust example of a C function that uses **CMSIS** (and STM32 HAL-style register access) to perform a **SPI transaction** and retrieve the **temperature reading** from a **DS1722** digital thermometer on an **STM32L432KC**.
+
+---
+
+### 🧠 Background
+
+* The **DS1722** uses an SPI interface (Mode 3: `CPOL=1`, `CPHA=1`).
+* To read temperature, you issue a *Read Temperature MSB* command (`0x02`) and optionally the *Read LSB* command (`0x01`) after it, depending on resolution.
+* Each register read is one byte, MSB first.
+* The temperature register is **16-bit**, left-justified.
+
+---
+
+### ✅ Example Function
+
+```c
+#include "stm32l4xx.h"  // CMSIS header for STM32L4 series
+#include <stdint.h>
+
+// DS1722 Register addresses
+#define DS1722_REG_TEMP_MSB  0x02
+#define DS1722_REG_TEMP_LSB  0x01
+
+// SPI chip select macros
+#define DS1722_CS_LOW()   (GPIOA->BSRR = (uint32_t)(1 << (4 + 16)))  // e.g., PA4 low
+#define DS1722_CS_HIGH()  (GPIOA->BSRR = (uint32_t)(1 << 4))         // PA4 high
+
+// === Function: SPI Transfer (single byte) ===
+static uint8_t SPI_TransferByte(SPI_TypeDef *SPIx, uint8_t data)
+{
+    while (!(SPIx->SR & SPI_SR_TXE));     // Wait until TX buffer empty
+    *((__IO uint8_t *)&SPIx->DR) = data;  // Write data to SPI data register
+    while (!(SPIx->SR & SPI_SR_RXNE));    // Wait until RX buffer not empty
+    return *((__IO uint8_t *)&SPIx->DR);  // Read received data
+}
+
+// === Function: Read Temperature ===
+float DS1722_ReadTemperature(SPI_TypeDef *SPIx)
+{
+    uint8_t msb, lsb;
+    uint16_t raw;
+    float temperature;
+
+    DS1722_CS_LOW();
+
+    // Read MSB
+    SPI_TransferByte(SPIx, DS1722_REG_TEMP_MSB);  // Send command
+    msb = SPI_TransferByte(SPIx, 0x00);           // Dummy write to read
+
+    // Read LSB (optional for higher resolution)
+    SPI_TransferByte(SPIx, DS1722_REG_TEMP_LSB);
+    lsb = SPI_TransferByte(SPIx, 0x00);
+
+    DS1722_CS_HIGH();
+
+    // Combine bytes (MSB: bits 15–8, LSB: bits 7–0)
+    raw = ((uint16_t)msb << 8) | lsb;
+
+    // Convert to °C
+    // DS1722 uses 0.5°C per bit in 9-bit mode, or 0.0625°C/bit in 12-bit mode.
+    // Assume 12-bit mode by default.
+    temperature = (raw >> 4) * 0.0625f;
+
+    return temperature;
+}
+```
+
+---
+
+### ⚙️ Setup Notes
+
+1. **SPI Configuration**
+
+   ```c
+   // Example: SPI1 on STM32L432KC
+   RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
+   RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
+
+   // SPI1 pins: PA5=SCK, PA6=MISO, PA7=MOSI, PA4=CS
+   GPIOA->MODER &= ~(GPIO_MODER_MODE4_Msk | GPIO_MODER_MODE5_Msk |
+                     GPIO_MODER_MODE6_Msk | GPIO_MODER_MODE7_Msk);
+   GPIOA->MODER |= (1U << GPIO_MODER_MODE5_Pos) | (1U << GPIO_MODER_MODE6_Pos) | (1U << GPIO_MODER_MODE7_Pos); // AF mode
+   GPIOA->AFR[0] |= (5 << (5*4)) | (5 << (6*4)) | (5 << (7*4)); // AF5 for SPI1
+   GPIOA->MODER |= (1U << GPIO_MODER_MODE4_Pos); // CS as output
+   DS1722_CS_HIGH();
+
+   SPI1->CR1 = SPI_CR1_MSTR | SPI_CR1_SSM | SPI_CR1_SSI |
+               SPI_CR1_CPOL | SPI_CR1_CPHA | SPI_CR1_BR_1; // Mode 3, Master, SSM
+   SPI1->CR1 |= SPI_CR1_SPE; // Enable SPI
+   ```
+
+2. **Call Example**
+
+   ```c
+   float temp = DS1722_ReadTemperature(SPI1);
+   printf("Temperature: %.2f °C\\n", temp);
+   ```
+
+---
+
+### 🧩 Optional Enhancements
+
+* Add error checking (e.g., SPI timeout).
+* Handle precision configuration (DS1722 allows setting resolution in config register `0x0A`).
+* Wrap SPI init and read in FreeRTOS-safe critical sections if multitasking.
+
+---
+
+Would you like me to extend this so it **initializes the DS1722** (sets continuous conversion and precision) before reading temperature? That would make it fully ready for embedded use.
+
+## Reflection
+For the website presonally I think it is really clean. The colors are a good contrast between the blue and the whie and the Temperature reading is nice and big so it is easy to see for the user. They have for the led on and off they have a rendered led which is visually very helpful. The precision is converted from bits to decimal which is more understandable for users. It has a bunch of other little features like last time update and a debug log at the bottom making it easier to fix. However when I tried to render it on my ESP8266 through the MCU the site would not render because I couldn't even build it. The direct copy and paste was not viable because the formatting into char was a little different from what chat gave me.
+
+For the C code provided by Chat GPT it was overall pretty good. However it doesn't utilize a lot of preexisting libraries that I have. For example doing all the GPIO pin enables it is doing direct bit manipulation making it a little difficult to understand. IT forgets to do a few specific things such as seting RXNE threshold to 8 bits and enabling SS output. It doesn't set hte frame format to 8 bits. For the temperature reading its overal really solid. It doesn't declare any of the variables as volatile which is annoying. The way it converts from binay to float is also a little concerning. It does it differntly by  then shifting the combined number back which does make sense but it assumes 12 bit resolution. The code doesn't compile because there is some sort of syntax error involving a paranthesis.
