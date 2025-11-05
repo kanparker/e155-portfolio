@@ -1,8 +1,446 @@
 ---
 title: "Lab 6"
-description: "Lab 6"
+description: "Programming a STM32L432KC Microcontroller to read temperature from a DS1722 and Display readings on a ESP8266 Webserver."
 author: "Kanoa Parker"
-date: "8/29/205"
+date: "11/4/205"
 ---
+# Table of Contents
+1. [Introduction](#introduction)
+2. [Schematic](#Schematic)
+3. [C Code](#c_code)
+        3.1 [Main C](#main)
+        3.2 [Main Header](#mainh)
+        3.3 [Start Up Code](#start)
+        3.4 [Update Sensitivity](#updsens)
+        3.5 [Update LED](#updled)
+        3.6 [In String](#inString)
+        3.7 [Webserver set up](#html)
+        3.8 [SPI Header](#spih)
+        3.9 [SPI C](#spic)
+        3.10 [DS1722 Header](#dsh)
+        3.11 [DS1722 C](#dsc)
+5. [Sample Spi Communication](#samp_spi)
+6. [AI Prototype](#aip)
 
-Lab 2 tbd
+# This it the Introduction <a name="introdction"></a>
+In this lab I developed code for the STM32L432KC to communicate to a DS1722 temperature sensor through SPI communication protocals.
+I then through USART and HTML created a Webpage to display the temperature readings and hosted that webpage on an ESP8266 webserver.
+The Webserver displays the temperature in degrees Celsius and the number of bits of resolution. In addition there is a button on the
+Webserver to turn on and off an LED on the Microcontroller. The Lab Meets all specifications and took 9.5 hours to complete.
+
+# Schematic <a name="Schematic"></a>
+![Schematic of Bread Board](images\lab5_schematic.jpg)
+This a schematic showing connections between the MCU, DS1722, and ESP8266
+
+# C Code <a name="c_code"></a>
+This section contains code for the main module and interupt handlers and setup.
+
+## Main C <a name="main"></a>
+
+```C
+int main(void) {
+    /*
+    File: main.c
+    Author: kanoa Parker
+    Email: kanoa.parker@hmc.edu
+    Date: 11/4/2025
+    Description: Code for STM32L432KC to read temperature data from DS1722 and display temperature on Webpage
+    */
+  startup();
+
+  USART_TypeDef * USART = initUSART(USART1_ID, 125000);
+  
+  volatile uint8_t sensitivity;
+  volatile float temperature;
+  volatile char tempstring[50];
+  volatile int led_status;
+  char ledStatusStr[20];
+  char sensitivitystatus[20];
+  set_sensitivity(0xe0);
+  
+  while(1) {
+    /* Wait for ESP8266 to send a request.
+    Requests take the form of '/REQ:<tag>\n', with TAG begin <= 10 characters.
+    Therefore the request[] array must be able to contain 18 characters.
+    */
+    
+    // Receive web request from the ESP
+    char request[BUFF_LEN] = "                  "; // initialize to known value
+    int charIndex = 0;
+  
+    // Keep going until you get end of line character
+    while(inString(request, "\n") == -1) {
+      // Wait for a complete request to be transmitted before processing
+      while(!(USART->ISR & USART_ISR_RXNE));
+      request[charIndex++] = readChar(USART);
+    }
+    
+    //read temp
+    temperature = retrieve_temp();
+    //turns float to string
+    sprintf(tempstring, "%f",temperature);
+
+    // Update string with current LED state
+    led_status = updateLEDStatus(request, led_status);
+
+    
+    if (led_status == 1)
+      sprintf(ledStatusStr,"LED is on!");
+    else if (led_status == 0)
+      sprintf(ledStatusStr,"LED is off!");
+    
+    sensitivity = updateSensitivity(request, sensitivity);
+    set_sensitivity(sensitivity);
+
+    if(sensitivity == 0xe0)
+      sprintf(sensitivitystatus,"8 bits");
+    else if(sensitivity == 0xe2)
+      sprintf(sensitivitystatus,"9 bits");
+    else if(sensitivity == 0xe4)
+      sprintf(sensitivitystatus,"10 bits");
+    else if(sensitivity == 0xe6)
+      sprintf(sensitivitystatus,"11 bits");
+    else if(sensitivity == 0xe8)
+      sprintf(sensitivitystatus,"12 bits");
+
+    // finally, transmit the webpage over UART
+    sendString(USART, webpageStart); // webpage header code
+    sendString(USART, ledStr); // button for controlling LED
+
+    sendString(USART, "<h2>LED Status</h2>");
+
+
+    sendString(USART, "<p>");
+    sendString(USART, ledStatusStr);
+    sendString(USART, "</p>");
+    
+    sendString(USART,tempStr);
+    sendString(USART, "<p>");
+    sendString(USART, tempstring);
+    sendString(USART, "Celsius </p>");
+    
+    sendString(USART, tempsensitivity);
+    sendString(USART, "<p> Current sensitivity:");
+    sendString(USART, sensitivitystatus);
+    sendString(USART, "</p>");
+    sendString(USART, webpageEnd);
+    
+  }
+```
+Main Module.  
+Link to github with full list of library and header files. 
+[Link to Git Hub](https://github.com/kanparker/e155_lab5).
+
+## Main Header <a name="mainh"></a>
+```c
+/**
+    Main Header: Contains general defines and selected portions of CMSIS files
+    @file main.h
+    @author Kanoa parker
+    @email kanparker@hmc.edu
+    @date 11/4/2025
+*/
+
+#ifndef MAIN_H
+#define MAIN_H
+
+#include "C:\Users\kanoa\Documents\hmc-e155\lab\lab06\lib\STM32L432KC.h"
+
+#define LED_PIN PA8 // LED pin for blinking on Port B pin 3
+#define LED_PIN2 PA9
+#define BUFF_LEN 32
+
+#endif // MAIN_H
+```
+
+## startup() <a name="start"></a>
+
+```c
+void startup(void){
+    ///startup code doing configurations
+  configureFlash();
+  configureClock();
+  gpioEnable(GPIO_PORT_A);
+  gpioEnable(GPIO_PORT_B);
+  gpioEnable(GPIO_PORT_C);
+  pinMode(LED_PIN, GPIO_OUTPUT);
+  RCC->APB2ENR |= (RCC_APB2ENR_TIM15EN);
+  initTIM(TIM15);
+  initSPI(0b101, 1, 1); // SPI clk = master clk / 64, CPOL = 1, CPHA = 1
+}
+```
+Interupt handler for EXTI0 which is connected to the encoder signal A.
+
+
+## updateSensitivity <a name="updsens"></a>
+
+```c
+uint8_t updateSensitivity(char request[],uint8_t current_sen)
+{       ///update sensitivity bits to be sent to DS1722 based on request from webserver
+        uint8_t sensitivity_status = current_sen;
+        if (inString(request, "8b")==1){
+          sensitivity_status= 0xe0;
+          //blinky();
+        }
+        else if (inString(request, "9b")==1){
+          sensitivity_status = 0xe2;
+          //blinky();
+        }
+        else if (inString(request, "10b")==1){
+          sensitivity_status = 0xe4;
+          //blinky();
+        }
+        else if (inString(request, "11b")==1){
+          sensitivity_status = 0xe6;
+          //blinky();
+        }
+        else if (inString(request, "12b")==1){
+          sensitivity_status = 0xe8;
+          //blinky();
+        }
+
+        return sensitivity_status;
+
+
+}
+```
+Interupt handler for EXTI0 which is connected to the encoder signal A.
+
+## updateLEDStatus<a name="updled"></a>
+```c
+int updateLEDStatus(char request[], int current_status)
+{   ///updates led status based on webserver request
+	int led_status = current_status;
+	// The request has been received. now process to determine whether to turn the LED on or off
+	if (inString(request, "ledoff")==1) {
+		digitalWrite(LED_PIN, GPIO_LOW);
+		led_status = 0;
+	}
+	else if (inString(request, "ledon")==1) {
+		digitalWrite(LED_PIN, GPIO_HIGH);
+		led_status = 1;
+	}
+
+	return led_status;
+}
+```
+
+
+## inString<a name="inString"></a>
+```c
+int inString(char request[], char des[]) {
+    ///checks for if char is in request
+	if (strstr(request, des) != NULL) {return 1;}
+	return -1;
+}
+```
+
+## HTML Webpage Setup <a name="html"></a>
+```c
+//Defining the web page in two chunks: everything before the current time, and everything after the current time
+char* webpageStart = "<!DOCTYPE html><html><head><title>E155 Web Server Demo Webpage</title>\
+	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\
+	</head>\
+	<body><h1>E155 Web Server Demo Webpage</h1>";
+char* ledStr = "<p>LED Control:</p><form action=\"ledon\"><input type=\"submit\" value=\"Turn the LED on!\"></form>\
+	<form action=\"ledoff\"><input type=\"submit\" value=\"Turn the LED off!\"></form>";
+//Defining Temperature Reading
+char* tempStr = "<h2> Temperature Sensor Reading:</h2>";
+//Form for temperature sensitivity
+char* tempsensitivity = "<p>Temperature Sensitivity Control</p><form action= \"sensitivity\">\
+  <input type=\"radio\" id=\"8 bit\" name=\"fav\" value=\"8b\">\
+  <label for=\"8 bit\">8 bit</label><br>\
+  <input type=\"radio\" id=\"9 bit\" name=\"fav\" value=\"9b\">\
+  <label for=\"9 bit\">9 bit</label><br>\
+  <input type=\"radio\" id=\"10 bit\" name=\"fav\" value=\"10b\">\
+  <label for=\"10 bit\">10 bit</label><br>\
+  <input type=\"radio\" id=\"11 bit\" name=\"fav\" value=\"11b\">\
+  <label for=\"11 bit\">11 bit</label><br>\
+  <input type=\"radio\" id=\"12 bit\" name=\"fav\" value=\"12b\">\
+  <label for=\"12 bit\">12 bit</label><br>\
+  <input type=\"submit\" value=\"Submit\">\
+  </form>";
+char* webpageEnd   = "</body></html>";
+```
+
+## SPI Header <a name="spih"></a>
+```c 
+// STM32L432KC_SPI.h
+// TODO: Kanoa Parker
+//kanparker@hmc.edu
+// 11/4/2025
+//SPI header file
+
+#ifndef STM32L4_SPI_H
+#define STM32L4_SPI_H
+
+#include <stdint.h>
+#include <stm32l432xx.h>
+
+///////////////////////////////////////////////////////////////////////////////
+// Function prototypes
+///////////////////////////////////////////////////////////////////////////////
+
+/* Enables the SPI peripheral and intializes its clock speed (baud rate), polarity, and phase.
+ *    -- br: (0b000 - 0b111). The SPI clk will be the master clock / 2^(BR+1).
+ *    -- cpol: clock polarity (0: inactive state is logical 0, 1: inactive state is logical 1).
+ *    -- cpha: clock phase (0: data captured on leading edge of clk and changed on next edge, 
+ *          1: data changed on leading edge of clk and captured on next edge)
+ * Refer to the datasheet for more low-level details. */ 
+void initSPI(int br, int cpol, int cpha);
+
+/* Transmits a character (1 byte) over SPI and returns the received character.
+ *    -- send: the character to send over SPI
+ *    -- return: the character received over SPI */
+char spiSendReceive(char send);
+    
+#endif
+```
+
+
+## SPI C File <a name="spic"></a>
+```c 
+// STM32L432KC_SPI.c
+// TODO: Kanoa Parker
+// TODO: kanparker@hmc.edu
+// TODO: 11/4/2025
+// TODO: SPI C files to send and recieve data
+
+#include "STM32L432KC.h"
+#include "STM32L432KC_SPI.h"
+#include "STM32L432KC_RCC.h"
+#include "STM32L432KC_GPIO.h"
+
+void initSPI(int br, int cpol, int cpha){
+    // Enable SPI1 clock
+    RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
+    RCC->AHB2ENR |= RCC_AHB2ENR_GPIOAEN;
+    RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN; // Enable GPIOA clock for SPI1 pins
+    
+    // Configure GPIO pins for SPI1
+    pinMode(PB3, GPIO_ALT); // SCK
+    pinMode(PB4, GPIO_ALT); // MISO
+    pinMode(PB5, GPIO_ALT); // MOSI
+    pinMode(PB1, GPIO_OUTPUT); // CE
+
+    //Set alternate function to AF5 (SPI1)
+    GPIOB->AFR[0] |= _VAL2FLD(GPIO_AFRL_AFSEL3, 5);
+    GPIOB->AFR[0] |= _VAL2FLD(GPIO_AFRL_AFSEL4, 5);
+    GPIOB->AFR[0] |= _VAL2FLD(GPIO_AFRL_AFSEL5, 5);
+    
+    GPIOB ->OSPEEDR |= (GPIO_OSPEEDR_OSPEED3); // Set PA5 speed to high
+    // Configure SPI1
+    SPI1->CR1 = 0; // Reset CR1 register
+    
+    // Set baud rate, clock polarity, and clock phase
+    SPI1->CR1 &= ~(SPI_CR1_CPOL | SPI_CR1_CPHA | SPI_CR1_LSBFIRST | SPI_CR1_SSM);
+    SPI1->CR1 |= _VAL2FLD(SPI_CR1_BR, br);
+    SPI1->CR1 |= _VAL2FLD(SPI_CR1_CPOL, cpol);
+    SPI1->CR1 |= _VAL2FLD(SPI_CR1_CPHA, cpha);
+
+    // Set as Master,
+    SPI1->CR1 |= _VAL2FLD(SPI_CR1_MSTR,1); 
+
+    // Set data frame format to 8 bits
+    SPI1->CR2 |= _VAL2FLD(SPI_CR2_DS,0b0111);
+
+    SPI1->CR2 |= (SPI_CR2_FRXTH); // Set RXNE threshold to 8 bits
+    SPI1->CR2 |= (SPI_CR2_SSOE); // Enable SS output
+
+    // Enable SPI
+    SPI1->CR1 |= SPI_CR1_SPE;
+
+
+}
+
+char spiSendReceive(char send){
+    // Wait until TXE (Transmit buffer empty) flag is set
+    while(!(SPI1->SR & SPI_SR_TXE));
+    // Send data
+    *(volatile uint8_t *) (&SPI1->DR) = send;
+    
+    // Wait until RXNE (Receive buffer not empty) flag is set
+    while(!(SPI1->SR & SPI_SR_RXNE));
+    // Read and return received data
+    char readval = (volatile char) SPI1->DR;
+    return readval;
+} 
+```
+
+## DS1722 Header <a name="dsh"></a>
+```c 
+// DS1722.h
+// TODO: Kanoa Parker
+// TODO: kanparker@g.hmc.edu
+// TODO: 11/3/2025
+// TODO: Modules for setting temperature sensitivity and extracting temperature data from DS1722
+
+#ifndef STM32L4_DS1722_H
+#define STM32L4_DS1722_H
+
+#include <stdint.h>
+#include <stdio.h>
+#include <stm32l432xx.h>
+#include "STM32L432KC_GPIO.h"
+
+
+
+float retrieve_temp(void);
+
+void set_sensitivity(uint8_t sensitivity);
+#endif
+```
+
+## DS1722 C <a name="dsc"></a>
+```c 
+// DS1722.c
+// TODO: Kanoa Parker
+// TODO: kanparker@g.hmc.edu
+// TODO: 11/3/2025
+// TODO: Modules for setting temperature sensitivity and extracting temperature data from DS1722
+
+#include "STM32L432KC_GPIO.h"
+#include "STM32L432KC_SPI.h"
+#include "DS1722.h"
+
+
+float retrieve_temp(void){
+    volatile uint16_t temp_reading;
+    volatile uint8_t temp_reading2;
+    volatile uint8_t sensitivity;
+    volatile float temperature;
+    //volatile char tempstring[50];
+
+    digitalWrite(PB1,GPIO_HIGH);
+    spiSendReceive(0x02); //First half of bits address
+    temp_reading = spiSendReceive(0x50);
+    digitalWrite(PB1,GPIO_LOW);
+    //printf("First Half of Bits is %d\n",temp_reading);
+    
+    digitalWrite(PB1,GPIO_HIGH);
+    spiSendReceive(0x01);
+    temp_reading2 = spiSendReceive(0x50); //Second half of bits
+    digitalWrite(PB1,GPIO_LOW);
+    //printf("Second half of bits %d\n",temp_reading2);
+    
+    temp_reading = ((uint16_t)(temp_reading)<<8 | temp_reading2);
+    temp_reading = (float)(temp_reading);
+    temperature = temp_reading/256.0;
+    //printf("The temperature is: %f\n",temperature);
+    //sprintf(tempstring, "%f",temperature);
+    return temperature;
+}
+
+void set_sensitivity(uint8_t sensitivity){
+    digitalWrite(PB1,GPIO_HIGH);
+    spiSendReceive(0x80);  
+    spiSendReceive(sensitivity);
+    digitalWrite(PB1,GPIO_LOW);
+}
+```
+
+
+
+# Comparison of Manual vs Interupts <a name="compare"></a>
+
+# AI Prototype <a name="aip"></a>

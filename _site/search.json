@@ -11,14 +11,14 @@
     "href": "labss.html",
     "title": "E155 Labs",
     "section": "",
-    "text": "Lab 1\n\n\nProgramming a Seven Segment display and 3 LEDs with Combinational Logic\n\n\n\n\n\nSep 2, 2025\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 2\n\n\nProgramming a Dual Seven Segment display controlled by 2 sets of 4 dipswitches. Using a time multiplexer the inputs from four switches control one half of the display. In addition 5 leds indicate the sum of the two sets of 4 dip switches.\n\n\n\n\n\nSep 9, 2025\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 3\n\n\nLab 3\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 4\n\n\nProgramming a STM32L432KC Microcontroller to output a PWM wave at specific freqeuncies and at specific durations in order to drive a speaker.\n\n\n\n\n\nSep 30, 2025\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 5\n\n\nProgramming a STM32L432KC Microcontroller to read pulses from a motor encoder and interpreting those waves as interupts in order to calculate rotation speed.\n\n\n\n\n\nOct 7, 2025\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 6\n\n\nLab 6\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 7\n\n\nLab 7\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
+    "text": "Lab 1\n\n\nProgramming a Seven Segment display and 3 LEDs with Combinational Logic\n\n\n\n\n\nSep 2, 2025\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 2\n\n\nProgramming a Dual Seven Segment display controlled by 2 sets of 4 dipswitches. Using a time multiplexer the inputs from four switches control one half of the display. In addition 5 leds indicate the sum of the two sets of 4 dip switches.\n\n\n\n\n\nSep 9, 2025\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 3\n\n\nLab 3\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 4\n\n\nProgramming a STM32L432KC Microcontroller to output a PWM wave at specific freqeuncies and at specific durations in order to drive a speaker.\n\n\n\n\n\nSep 30, 2025\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 5\n\n\nProgramming a STM32L432KC Microcontroller to read pulses from a motor encoder and interpreting those waves as interupts in order to calculate rotation speed.\n\n\n\n\n\nOct 7, 2025\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 6\n\n\nProgramming a STM32L432KC Microcontroller to read temperature from a DS1722 and Display readings on a ESP8266 Webserver.\n\n\n\n\n\nNov 4, 205\n\n\nKanoa Parker\n\n\n\n\n\n\n\n\n\n\n\n\nLab 7\n\n\nLab 7\n\n\n\n\n\nAug 29, 205\n\n\nKanoa Parker\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "labs/lab6/lab6.html",
     "href": "labs/lab6/lab6.html",
     "title": "Lab 6",
     "section": "",
-    "text": "Lab 2 tbd"
+    "text": "Introduction\nSchematic\nC Code 3.1 Main C 3.2 Main Header 3.3 Start Up Code 3.4 Update Sensitivity 3.5 Update LED 3.6 In String 3.7 Webserver set up 3.8 SPI Header 3.9 SPI C 3.10 DS1722 Header 3.11 DS1722 C\nSample Spi Communication\nAI Prototype"
   },
   {
     "objectID": "labs/lab4/lab4.html",
@@ -280,6 +280,13 @@
     "text": "main \nint main(void) {\n    pinMode(PA2,GPIO_OUTPUT);\n    printf(\"Sequence Start\\n\");\n    int volatile n = 0;\n\n    // Set system clock to 80 MHz\n    //configureClock();\n    //configurePLL();\n    //printf(\"Clock Configure\\n\");\n\n    // Enable button as input\n    gpioEnable(GPIO_PORT_A);\n    printf(\"Gpio Enable\\n\");\n    pinMode(PA0, GPIO_INPUT);\n    pinMode(PA1, GPIO_INPUT);\n    pinMode(PA2, GPIO_OUTPUT);\n    printf(\"Pinmode\\n\");\n    GPIOA-&gt;PUPDR |= _VAL2FLD(GPIO_PUPDR_PUPD0, 0b10); // Set PA0 as pull down\n    GPIOA-&gt;PUPDR |= _VAL2FLD(GPIO_PUPDR_PUPD1, 0b10); // Set PA1 as pull down\n    printf(\"Pull Up and Down\\n\");\n\n    // Initialize timer\n    RCC-&gt;APB1ENR1 |= RCC_APB1ENR1_TIM2EN;\n    initTIM(DELAY_TIM);\n    printf(\"Timer Initialize\\n\");\n\n    //set up interupts\n    interupt_set();\n    printf(\"Interupt Set\\n\");\n    \n    int volatile leadA;\n    printf(\"Volatile A Set\\n\");\n    int volatile leadB;\n    printf(\"Hit While Loop\\n\");\n    int volatile nn=0;\n    \n    digitalWrite(PA2,PIO_HIGH);\n    while(1){\n        \n\n        //interupt handler\n        EXTI0_IRQHandler();\n        EXTI1_IRQHandler();\n        \n        \n        //calculate speed\n        \n        //write to serial if it has been a second\n        if (write_counter==1000) {\n            speed = (float)(A_count + B_count)/(816.0*2); \n            printf(\"Current Speed is %f REV/s\\n\", speed);\n            write_counter = 0;\n            printf(\"Acount %d Bcount %d \\n\", A_count, B_count);\n            A_count = 0;\n            B_count = 0;\n            printf(\"%d \\n\", nn);\n            nn = nn+1;\n            \n        }\n        \n        //delay and increment counter\n        delay_millis(TIM2,1);\n        write_counter = (write_counter + 1);\n        //printf(\"%d \\n\", write_counter);\n        togglePin(PA2);\n        \n        \n\n    }\n}\nMain Module.\nLink to github with full list of library and header files. Link to Git Hub."
   },
   {
+    "objectID": "labs/lab5/lab5.html#exti0_irqhandler",
+    "href": "labs/lab5/lab5.html#exti0_irqhandler",
+    "title": "Lab 5",
+    "section": "EXTI0_IRQHandler ",
+    "text": "EXTI0_IRQHandler \nvoid EXTI1_IRQHandler(void) {\n    //read the leads\n    int leadA = digitalRead(PA0);\n    int leadB = digitalRead(PA1);\n    // Check that the button was what triggered our interrupt\n    if (EXTI-&gt;PR1 & (1 &lt;&lt; gpioPinOffset(PA1))){\n        // If so, clear the interrupt (NB: Write 1 to reset.)\n        EXTI-&gt;PR1 |= (1 &lt;&lt; gpioPinOffset(PA1));\n        //Rising Edge\n        if(leadB == 1){\n            //check direction\n            if(leadA ==1){\n                B_count = B_count + 1;\n            }\n            else{\n                B_count = B_count - 1;\n            }\n        }\n        //Falling Edge\n        else{\n            if(leadA ==0){\n                B_count = B_count + 1;\n            }\n            else{\n                B_count = B_count - 1;\n            }\n        }\n    }\n}\nInterupt handler for EXTI0 which is connected to the encoder signal A."
+  },
+  {
     "objectID": "labs/lab5/lab5.html#exti1_irqhandler",
     "href": "labs/lab5/lab5.html#exti1_irqhandler",
     "title": "Lab 5",
@@ -308,10 +315,87 @@
     "text": "My goals for this semster in micro p’s is to learn as much as I can. I want to get into a good work flow schedule and manage my time well. I think I can achieve this by setting aside specific time to do work and staying focused. We will see"
   },
   {
-    "objectID": "labs/lab5/lab5.html#exti0_irqhandler",
-    "href": "labs/lab5/lab5.html#exti0_irqhandler",
-    "title": "Lab 5",
-    "section": "EXTI0_IRQHandler ",
-    "text": "EXTI0_IRQHandler \nvoid EXTI1_IRQHandler(void) {\n    //read the leads\n    int leadA = digitalRead(PA0);\n    int leadB = digitalRead(PA1);\n    // Check that the button was what triggered our interrupt\n    if (EXTI-&gt;PR1 & (1 &lt;&lt; gpioPinOffset(PA1))){\n        // If so, clear the interrupt (NB: Write 1 to reset.)\n        EXTI-&gt;PR1 |= (1 &lt;&lt; gpioPinOffset(PA1));\n        //Rising Edge\n        if(leadB == 1){\n            //check direction\n            if(leadA ==1){\n                B_count = B_count + 1;\n            }\n            else{\n                B_count = B_count - 1;\n            }\n        }\n        //Falling Edge\n        else{\n            if(leadA ==0){\n                B_count = B_count + 1;\n            }\n            else{\n                B_count = B_count - 1;\n            }\n        }\n    }\n}\nInterupt handler for EXTI0 which is connected to the encoder signal A."
+    "objectID": "labs/lab6/lab6.html#main-c",
+    "href": "labs/lab6/lab6.html#main-c",
+    "title": "Lab 6",
+    "section": "Main C ",
+    "text": "Main C \nint main(void) {\n    /*\n    File: main.c\n    Author: kanoa Parker\n    Email: kanoa.parker@hmc.edu\n    Date: 11/4/2025\n    Description: Code for STM32L432KC to read temperature data from DS1722 and display temperature on Webpage\n    */\n  startup();\n\n  USART_TypeDef * USART = initUSART(USART1_ID, 125000);\n  \n  volatile uint8_t sensitivity;\n  volatile float temperature;\n  volatile char tempstring[50];\n  volatile int led_status;\n  char ledStatusStr[20];\n  char sensitivitystatus[20];\n  set_sensitivity(0xe0);\n  \n  while(1) {\n    /* Wait for ESP8266 to send a request.\n    Requests take the form of '/REQ:&lt;tag&gt;\\n', with TAG begin &lt;= 10 characters.\n    Therefore the request[] array must be able to contain 18 characters.\n    */\n    \n    // Receive web request from the ESP\n    char request[BUFF_LEN] = \"                  \"; // initialize to known value\n    int charIndex = 0;\n  \n    // Keep going until you get end of line character\n    while(inString(request, \"\\n\") == -1) {\n      // Wait for a complete request to be transmitted before processing\n      while(!(USART-&gt;ISR & USART_ISR_RXNE));\n      request[charIndex++] = readChar(USART);\n    }\n    \n    //read temp\n    temperature = retrieve_temp();\n    //turns float to string\n    sprintf(tempstring, \"%f\",temperature);\n\n    // Update string with current LED state\n    led_status = updateLEDStatus(request, led_status);\n\n    \n    if (led_status == 1)\n      sprintf(ledStatusStr,\"LED is on!\");\n    else if (led_status == 0)\n      sprintf(ledStatusStr,\"LED is off!\");\n    \n    sensitivity = updateSensitivity(request, sensitivity);\n    set_sensitivity(sensitivity);\n\n    if(sensitivity == 0xe0)\n      sprintf(sensitivitystatus,\"8 bits\");\n    else if(sensitivity == 0xe2)\n      sprintf(sensitivitystatus,\"9 bits\");\n    else if(sensitivity == 0xe4)\n      sprintf(sensitivitystatus,\"10 bits\");\n    else if(sensitivity == 0xe6)\n      sprintf(sensitivitystatus,\"11 bits\");\n    else if(sensitivity == 0xe8)\n      sprintf(sensitivitystatus,\"12 bits\");\n\n    // finally, transmit the webpage over UART\n    sendString(USART, webpageStart); // webpage header code\n    sendString(USART, ledStr); // button for controlling LED\n\n    sendString(USART, \"&lt;h2&gt;LED Status&lt;/h2&gt;\");\n\n\n    sendString(USART, \"&lt;p&gt;\");\n    sendString(USART, ledStatusStr);\n    sendString(USART, \"&lt;/p&gt;\");\n    \n    sendString(USART,tempStr);\n    sendString(USART, \"&lt;p&gt;\");\n    sendString(USART, tempstring);\n    sendString(USART, \"Celsius &lt;/p&gt;\");\n    \n    sendString(USART, tempsensitivity);\n    sendString(USART, \"&lt;p&gt; Current sensitivity:\");\n    sendString(USART, sensitivitystatus);\n    sendString(USART, \"&lt;/p&gt;\");\n    sendString(USART, webpageEnd);\n    \n  }\nMain Module.\nLink to github with full list of library and header files. Link to Git Hub."
+  },
+  {
+    "objectID": "labs/lab6/lab6.html#main-header",
+    "href": "labs/lab6/lab6.html#main-header",
+    "title": "Lab 6",
+    "section": "Main Header ",
+    "text": "Main Header \n/**\n    Main Header: Contains general defines and selected portions of CMSIS files\n    @file main.h\n    @author Kanoa parker\n    @email kanparker@hmc.edu\n    @date 11/4/2025\n*/\n\n#ifndef MAIN_H\n#define MAIN_H\n\n#include \"C:\\Users\\kanoa\\Documents\\hmc-e155\\lab\\lab06\\lib\\STM32L432KC.h\"\n\n#define LED_PIN PA8 // LED pin for blinking on Port B pin 3\n#define LED_PIN2 PA9\n#define BUFF_LEN 32\n\n#endif // MAIN_H"
+  },
+  {
+    "objectID": "labs/lab6/lab6.html#startup",
+    "href": "labs/lab6/lab6.html#startup",
+    "title": "Lab 6",
+    "section": "startup() ",
+    "text": "startup() \nvoid startup(void){\n    ///startup code doing configurations\n  configureFlash();\n  configureClock();\n  gpioEnable(GPIO_PORT_A);\n  gpioEnable(GPIO_PORT_B);\n  gpioEnable(GPIO_PORT_C);\n  pinMode(LED_PIN, GPIO_OUTPUT);\n  RCC-&gt;APB2ENR |= (RCC_APB2ENR_TIM15EN);\n  initTIM(TIM15);\n  initSPI(0b101, 1, 1); // SPI clk = master clk / 64, CPOL = 1, CPHA = 1\n}\nInterupt handler for EXTI0 which is connected to the encoder signal A."
+  },
+  {
+    "objectID": "labs/lab6/lab6.html#updatasensitivity",
+    "href": "labs/lab6/lab6.html#updatasensitivity",
+    "title": "Lab 6",
+    "section": "updataSensitivity ",
+    "text": "updataSensitivity \nuint8_t updateSensitivity(char request[],uint8_t current_sen)\n{\n        uint8_t sensitivity_status = current_sen;\n        if (inString(request, \"8b\")==1){\n          sensitivity_status= 0xe0;\n          //blinky();\n        }\n        else if (inString(request, \"9b\")==1){\n          sensitivity_status = 0xe2;\n          //blinky();\n        }\n        else if (inString(request, \"10b\")==1){\n          sensitivity_status = 0xe4;\n          //blinky();\n        }\n        else if (inString(request, \"11b\")==1){\n          sensitivity_status = 0xe6;\n          //blinky();\n        }\n        else if (inString(request, \"12b\")==1){\n          sensitivity_status = 0xe8;\n          //blinky();\n        }\n\n        return sensitivity_status;\n\n\n}\nInterupt handler for EXTI0 which is connected to the encoder signal A."
+  },
+  {
+    "objectID": "labs/lab6/lab6.html#updateledstatus",
+    "href": "labs/lab6/lab6.html#updateledstatus",
+    "title": "Lab 6",
+    "section": "updateLEDStatus",
+    "text": "updateLEDStatus\nint updateLEDStatus(char request[], int current_status)\n{   ///updates led status based on webserver request\n    int led_status = current_status;\n    // The request has been received. now process to determine whether to turn the LED on or off\n    if (inString(request, \"ledoff\")==1) {\n        digitalWrite(LED_PIN, GPIO_LOW);\n        led_status = 0;\n    }\n    else if (inString(request, \"ledon\")==1) {\n        digitalWrite(LED_PIN, GPIO_HIGH);\n        led_status = 1;\n    }\n\n    return led_status;\n}"
+  },
+  {
+    "objectID": "labs/lab6/lab6.html#instring",
+    "href": "labs/lab6/lab6.html#instring",
+    "title": "Lab 6",
+    "section": "inString",
+    "text": "inString\nint inString(char request[], char des[]) {\n    ///checks for if char is in request\n    if (strstr(request, des) != NULL) {return 1;}\n    return -1;\n}"
+  },
+  {
+    "objectID": "labs/lab6/lab6.html#html-webpage-setup",
+    "href": "labs/lab6/lab6.html#html-webpage-setup",
+    "title": "Lab 6",
+    "section": "HTML Webpage Setup ",
+    "text": "HTML Webpage Setup \n//Defining the web page in two chunks: everything before the current time, and everything after the current time\nchar* webpageStart = \"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;title&gt;E155 Web Server Demo Webpage&lt;/title&gt;\\\n    &lt;meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1.0\\\"&gt;\\\n    &lt;/head&gt;\\\n    &lt;body&gt;&lt;h1&gt;E155 Web Server Demo Webpage&lt;/h1&gt;\";\nchar* ledStr = \"&lt;p&gt;LED Control:&lt;/p&gt;&lt;form action=\\\"ledon\\\"&gt;&lt;input type=\\\"submit\\\" value=\\\"Turn the LED on!\\\"&gt;&lt;/form&gt;\\\n    &lt;form action=\\\"ledoff\\\"&gt;&lt;input type=\\\"submit\\\" value=\\\"Turn the LED off!\\\"&gt;&lt;/form&gt;\";\n//Defining Temperature Reading\nchar* tempStr = \"&lt;h2&gt; Temperature Sensor Reading:&lt;/h2&gt;\";\n//Form for temperature sensitivity\nchar* tempsensitivity = \"&lt;p&gt;Temperature Sensitivity Control&lt;/p&gt;&lt;form action= \\\"sensitivity\\\"&gt;\\\n  &lt;input type=\\\"radio\\\" id=\\\"8 bit\\\" name=\\\"fav\\\" value=\\\"8b\\\"&gt;\\\n  &lt;label for=\\\"8 bit\\\"&gt;8 bit&lt;/label&gt;&lt;br&gt;\\\n  &lt;input type=\\\"radio\\\" id=\\\"9 bit\\\" name=\\\"fav\\\" value=\\\"9b\\\"&gt;\\\n  &lt;label for=\\\"9 bit\\\"&gt;9 bit&lt;/label&gt;&lt;br&gt;\\\n  &lt;input type=\\\"radio\\\" id=\\\"10 bit\\\" name=\\\"fav\\\" value=\\\"10b\\\"&gt;\\\n  &lt;label for=\\\"10 bit\\\"&gt;10 bit&lt;/label&gt;&lt;br&gt;\\\n  &lt;input type=\\\"radio\\\" id=\\\"11 bit\\\" name=\\\"fav\\\" value=\\\"11b\\\"&gt;\\\n  &lt;label for=\\\"11 bit\\\"&gt;11 bit&lt;/label&gt;&lt;br&gt;\\\n  &lt;input type=\\\"radio\\\" id=\\\"12 bit\\\" name=\\\"fav\\\" value=\\\"12b\\\"&gt;\\\n  &lt;label for=\\\"12 bit\\\"&gt;12 bit&lt;/label&gt;&lt;br&gt;\\\n  &lt;input type=\\\"submit\\\" value=\\\"Submit\\\"&gt;\\\n  &lt;/form&gt;\";\nchar* webpageEnd   = \"&lt;/body&gt;&lt;/html&gt;\";"
+  },
+  {
+    "objectID": "labs/lab6/lab6.html#spi-header",
+    "href": "labs/lab6/lab6.html#spi-header",
+    "title": "Lab 6",
+    "section": "SPI Header ",
+    "text": "SPI Header \n// STM32L432KC_SPI.h\n// TODO: Kanoa Parker\n//kanparker@hmc.edu\n// 11/4/2025\n//SPI header file\n\n#ifndef STM32L4_SPI_H\n#define STM32L4_SPI_H\n\n#include &lt;stdint.h&gt;\n#include &lt;stm32l432xx.h&gt;\n\n///////////////////////////////////////////////////////////////////////////////\n// Function prototypes\n///////////////////////////////////////////////////////////////////////////////\n\n/* Enables the SPI peripheral and intializes its clock speed (baud rate), polarity, and phase.\n *    -- br: (0b000 - 0b111). The SPI clk will be the master clock / 2^(BR+1).\n *    -- cpol: clock polarity (0: inactive state is logical 0, 1: inactive state is logical 1).\n *    -- cpha: clock phase (0: data captured on leading edge of clk and changed on next edge, \n *          1: data changed on leading edge of clk and captured on next edge)\n * Refer to the datasheet for more low-level details. */ \nvoid initSPI(int br, int cpol, int cpha);\n\n/* Transmits a character (1 byte) over SPI and returns the received character.\n *    -- send: the character to send over SPI\n *    -- return: the character received over SPI */\nchar spiSendReceive(char send);\n    \n#endif"
+  },
+  {
+    "objectID": "labs/lab6/lab6.html#spi-c-file",
+    "href": "labs/lab6/lab6.html#spi-c-file",
+    "title": "Lab 6",
+    "section": "SPI C File ",
+    "text": "SPI C File \n// STM32L432KC_SPI.c\n// TODO: Kanoa Parker\n// TODO: kanparker@hmc.edu\n// TODO: 11/4/2025\n// TODO: SPI C files to send and recieve data\n\n#include \"STM32L432KC.h\"\n#include \"STM32L432KC_SPI.h\"\n#include \"STM32L432KC_RCC.h\"\n#include \"STM32L432KC_GPIO.h\"\n\nvoid initSPI(int br, int cpol, int cpha){\n    // Enable SPI1 clock\n    RCC-&gt;APB2ENR |= RCC_APB2ENR_SPI1EN;\n    RCC-&gt;AHB2ENR |= RCC_AHB2ENR_GPIOAEN;\n    RCC-&gt;AHB2ENR |= RCC_AHB2ENR_GPIOBEN; // Enable GPIOA clock for SPI1 pins\n    \n    // Configure GPIO pins for SPI1\n    pinMode(PB3, GPIO_ALT); // SCK\n    pinMode(PB4, GPIO_ALT); // MISO\n    pinMode(PB5, GPIO_ALT); // MOSI\n    pinMode(PB1, GPIO_OUTPUT); // CE\n\n    //Set alternate function to AF5 (SPI1)\n    GPIOB-&gt;AFR[0] |= _VAL2FLD(GPIO_AFRL_AFSEL3, 5);\n    GPIOB-&gt;AFR[0] |= _VAL2FLD(GPIO_AFRL_AFSEL4, 5);\n    GPIOB-&gt;AFR[0] |= _VAL2FLD(GPIO_AFRL_AFSEL5, 5);\n    \n    GPIOB -&gt;OSPEEDR |= (GPIO_OSPEEDR_OSPEED3); // Set PA5 speed to high\n    // Configure SPI1\n    SPI1-&gt;CR1 = 0; // Reset CR1 register\n    \n    // Set baud rate, clock polarity, and clock phase\n    SPI1-&gt;CR1 &= ~(SPI_CR1_CPOL | SPI_CR1_CPHA | SPI_CR1_LSBFIRST | SPI_CR1_SSM);\n    SPI1-&gt;CR1 |= _VAL2FLD(SPI_CR1_BR, br);\n    SPI1-&gt;CR1 |= _VAL2FLD(SPI_CR1_CPOL, cpol);\n    SPI1-&gt;CR1 |= _VAL2FLD(SPI_CR1_CPHA, cpha);\n\n    // Set as Master,\n    SPI1-&gt;CR1 |= _VAL2FLD(SPI_CR1_MSTR,1); \n\n    // Set data frame format to 8 bits\n    SPI1-&gt;CR2 |= _VAL2FLD(SPI_CR2_DS,0b0111);\n\n    SPI1-&gt;CR2 |= (SPI_CR2_FRXTH); // Set RXNE threshold to 8 bits\n    SPI1-&gt;CR2 |= (SPI_CR2_SSOE); // Enable SS output\n\n    // Enable SPI\n    SPI1-&gt;CR1 |= SPI_CR1_SPE;\n\n\n}\n\nchar spiSendReceive(char send){\n    // Wait until TXE (Transmit buffer empty) flag is set\n    while(!(SPI1-&gt;SR & SPI_SR_TXE));\n    // Send data\n    *(volatile uint8_t *) (&SPI1-&gt;DR) = send;\n    \n    // Wait until RXNE (Receive buffer not empty) flag is set\n    while(!(SPI1-&gt;SR & SPI_SR_RXNE));\n    // Read and return received data\n    char readval = (volatile char) SPI1-&gt;DR;\n    return readval;\n}"
+  },
+  {
+    "objectID": "labs/lab6/lab6.html#ds1722-header",
+    "href": "labs/lab6/lab6.html#ds1722-header",
+    "title": "Lab 6",
+    "section": "DS1722 Header ",
+    "text": "DS1722 Header \n// DS1722.h\n// TODO: Kanoa Parker\n// TODO: kanparker@g.hmc.edu\n// TODO: 11/3/2025\n// TODO: Modules for setting temperature sensitivity and extracting temperature data from DS1722\n\n#ifndef STM32L4_DS1722_H\n#define STM32L4_DS1722_H\n\n#include &lt;stdint.h&gt;\n#include &lt;stdio.h&gt;\n#include &lt;stm32l432xx.h&gt;\n#include \"STM32L432KC_GPIO.h\"\n\n\n\nfloat retrieve_temp(void);\n\nvoid set_sensitivity(uint8_t sensitivity);\n#endif"
+  },
+  {
+    "objectID": "labs/lab6/lab6.html#ds1722-c",
+    "href": "labs/lab6/lab6.html#ds1722-c",
+    "title": "Lab 6",
+    "section": "DS1722 C ",
+    "text": "DS1722 C \n// DS1722.c\n// TODO: Kanoa Parker\n// TODO: kanparker@g.hmc.edu\n// TODO: 11/3/2025\n// TODO: Modules for setting temperature sensitivity and extracting temperature data from DS1722\n\n#include \"STM32L432KC_GPIO.h\"\n#include \"STM32L432KC_SPI.h\"\n#include \"DS1722.h\"\n\n\nfloat retrieve_temp(void){\n    volatile uint16_t temp_reading;\n    volatile uint8_t temp_reading2;\n    volatile uint8_t sensitivity;\n    volatile float temperature;\n    //volatile char tempstring[50];\n\n    digitalWrite(PB1,GPIO_HIGH);\n    spiSendReceive(0x02); //First half of bits address\n    temp_reading = spiSendReceive(0x50);\n    digitalWrite(PB1,GPIO_LOW);\n    //printf(\"First Half of Bits is %d\\n\",temp_reading);\n    \n    digitalWrite(PB1,GPIO_HIGH);\n    spiSendReceive(0x01);\n    temp_reading2 = spiSendReceive(0x50); //Second half of bits\n    digitalWrite(PB1,GPIO_LOW);\n    //printf(\"Second half of bits %d\\n\",temp_reading2);\n    \n    temp_reading = ((uint16_t)(temp_reading)&lt;&lt;8 | temp_reading2);\n    temp_reading = (float)(temp_reading);\n    temperature = temp_reading/256.0;\n    //printf(\"The temperature is: %f\\n\",temperature);\n    //sprintf(tempstring, \"%f\",temperature);\n    return temperature;\n}\n\nvoid set_sensitivity(uint8_t sensitivity){\n    digitalWrite(PB1,GPIO_HIGH);\n    spiSendReceive(0x80);  \n    spiSendReceive(sensitivity);\n    digitalWrite(PB1,GPIO_LOW);\n}"
+  },
+  {
+    "objectID": "labs/lab6/lab6.html#updatesensitivity",
+    "href": "labs/lab6/lab6.html#updatesensitivity",
+    "title": "Lab 6",
+    "section": "updateSensitivity ",
+    "text": "updateSensitivity \nuint8_t updateSensitivity(char request[],uint8_t current_sen)\n{       ///update sensitivity bits to be sent to DS1722 based on request from webserver\n        uint8_t sensitivity_status = current_sen;\n        if (inString(request, \"8b\")==1){\n          sensitivity_status= 0xe0;\n          //blinky();\n        }\n        else if (inString(request, \"9b\")==1){\n          sensitivity_status = 0xe2;\n          //blinky();\n        }\n        else if (inString(request, \"10b\")==1){\n          sensitivity_status = 0xe4;\n          //blinky();\n        }\n        else if (inString(request, \"11b\")==1){\n          sensitivity_status = 0xe6;\n          //blinky();\n        }\n        else if (inString(request, \"12b\")==1){\n          sensitivity_status = 0xe8;\n          //blinky();\n        }\n\n        return sensitivity_status;\n\n\n}\nInterupt handler for EXTI0 which is connected to the encoder signal A."
   }
 ]

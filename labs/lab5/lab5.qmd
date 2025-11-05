@@ -22,10 +22,10 @@ In this Lab I programmed a STM32L432KC Microcontroller to read the speed of a 25
 pulse were counted as interupt signals. Using an interupt handler which determined whether the signal was a rising or falling edge the signal was recorded and the interupt flag reset. The lab meets all specificfication and took 8 hours total to complete.
 
 # Schematic <a name="Schematic"></a>
-![Schematic of Bread Board](images\schematiclab111.png)
+![Schematic of Bread Board](images\lab5_schematic.jpg)
 
 # Flow Chart <a name="flow_chart"></a>
-![Blcok Diagramof Verilog Code](images\blockdiagram-12.jpg)
+![Blcok Diagramof Verilog Code](images\lab5_flowchart.jpg)
 
 # C Code <a name="c_code"></a>
 This section contains code for the main module and interupt handlers and setup.
