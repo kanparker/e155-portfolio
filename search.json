@@ -312,28 +312,28 @@
     "href": "labs/lab1/lab1.html",
     "title": "Lab 1",
     "section": "",
-    "text": "Introduction\nSchematic\nBlock Diagram\nVerilog Code 4.1 top 4.2 seven_segment_display 4.3 three_led\nTest Benches 5.1 testbench 5.2 seven_testbench 5.3 three_testbench\nNotes"
+    "text": "Introduction\nSchematic\nBlock Diagram\nVerilog Code 4.1 top 4.2 seven_segment_display 4.3 three_led\nTest Benches 5.1 testbench 5.2 seven_testbench 5.3 three_testbench\nNotes\nAI Prototype"
   },
   {
     "objectID": "labs/lab1/lab1.html#top",
     "href": "labs/lab1/lab1.html#top",
     "title": "Lab 1",
     "section": "top ",
-    "text": "top \nmodule top(\n    input   logic   [3:0]s,\n    output  logic [2:0]led,\n    output logic [6:0]seg\n);\n\n    three_led three(s, led);\n    seven_seg_display seven(s,seg);\n    \n    \n\nendmodule\nTop level module."
+    "text": "top \nmodule top(\n    input   logic   [3:0]s,\n    output  logic [2:0]led,\n    output logic [6:0]seg\n);\n    //top module for lab1\n    three_led three(s, led);\n    seven_seg_display seven(s,seg);\n    \n    \n\nendmodule\nTop level module."
   },
   {
     "objectID": "labs/lab1/lab1.html#seven_segment_display",
     "href": "labs/lab1/lab1.html#seven_segment_display",
     "title": "Lab 1",
     "section": "seven_segment_display ",
-    "text": "seven_segment_display \nmodule seven_seg_display(\n    input   logic   [3:0]s,\n    output  logic [6:0]seg\n);\n\n    logic A,B,C,D;\n    \n    assign A = s[3];\n    assign B = s[2];\n    assign C = s[1];\n    assign D = s[0];\n    \n    assign seg[6] = (~A&~C)&(B^D) | A&(~B&C&D | B&~C);\n    assign seg[5] = D&~(A^C) | B&(C&~D | A&~C&~D);\n    assign seg[4] = ~A&~B&C&~D | (A&B)&( ~C&~D | C);\n    assign seg[3] = (~A&D)& ~(B^C) | (A&~B)&(C^D) | B&( ~(A|C|D) | A&C&D);\n    assign seg[2] = (~A&~B&D) | (~A&B&~C) | (~A&B&C&D) | (A&~B&~C&D);\n    assign seg[1] = (~(A|B|C) & D) | (~A&~B&C) | (~A&B&C&D) | (A&B&~C);\n    assign seg[0] = ~(A|B|C|D) | (~A&~B&~C&D) | (~A&B&C&D);\n    \n\nendmodule\nSeven segment display takes an input of four switches, s[3:0], and ouputs to light up the seven segment display, seg[6:0]"
+    "text": "seven_segment_display \nmodule seven_seg_display(\n    input   logic   [3:0]s,\n    output  logic [6:0]seg\n);\n    //Seven segment display based on switch inputs, s[3:0] are input switches and seg[6:0] are for each segment of the display\n\n    logic A,B,C,D;\n    \n    assign A = s[3];\n    assign B = s[2];\n    assign C = s[1];\n    assign D = s[0];\n    \n    always_comb\n        case(s[3:0])\n            /// 0\n            4'b0000: seg[6:0] = 7'b0000001;\n            /// 1\n            4'b0001: seg[6:0] = 7'b1001111;\n            /// 2\n            4'b0010: seg[6:0] = 7'b0010010;\n            /// 3\n            4'b0011:seg[6:0] = 7'b0000110;\n            /// 4\n            4'b0100:seg[6:0] = 7'b1001100;\n            /// 5\n            4'b0101:seg[6:0] = 7'b0100100;\n            /// 6\n            4'b0110:seg[6:0] = 7'b0100000;\n            /// 7\n            4'b0111:seg[6:0] = 7'b0001111;\n            /// 8\n            4'b1000:seg[6:0] = 7'b0000000;\n            /// 9\n            4'b1001:seg[6:0] = 7'b0001100;\n            /// A\n            4'b1010:seg[6:0] = 7'b0001000;\n            /// B\n            4'b1011:seg[6:0] = 7'b1100000;\n            /// C\n            4'b1100:seg[6:0] = 7'b0110001;\n            /// D\n            4'b1101:seg[6:0] = 7'b1000010;\n            /// E\n            4'b1110:seg[6:0] = 7'b0110000;\n            /// F\n            4'b1111:seg[6:0] = 7'b0111000;\n        endcase\n            \n    \n\nendmodule\nSeven segment display takes an input of four switches, s[3:0], and ouputs to light up the seven segment display, seg[6:0]"
   },
   {
     "objectID": "labs/lab1/lab1.html#three_led",
     "href": "labs/lab1/lab1.html#three_led",
     "title": "Lab 1",
     "section": "three_led ",
-    "text": "three_led \nmodule three_led(\n    input   logic   [3:0]s,\n    output  logic [2:0]led\n);\n\n    logic int_osc;\n    logic pulse;\n    logic led_state = 0;\n    logic [31:0] counter = 0;\n    logic [31:0] P;\n    \n    assign P = 32'b00000000000000000000000011010111;\n    \n    // Internal high-speed oscillator\n    HSOSC hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));\n    \n    // Simple clock divider\n    always_ff @(posedge int_osc)\n        begin\n            counter &lt;= counter + P;\n        end\n    \n    xor x1(led[0],s[1],s[0]);\n    and a1(led[1],s[3],s[2]);\n    \n    assign led[2] = counter[31];\n    \n\nendmodule\nThree led takes in an input of four switches, s[3:0], and turns on or off leds, led[2:0]."
+    "text": "three_led \nmodule three_led(\n    input   logic   [3:0]s,\n    output  logic [2:0]led\n);\n    // Three led takes in an input of four switches, s[3:0], and turns on or off leds, led[2:0].\n\n    logic int_osc;\n    logic pulse;\n    logic led_state = 0;\n    logic [31:0] counter = 0;\n    logic [31:0] P;\n    \n    assign P = 32'b00000000000000000000000011010111;\n    \n    // Internal high-speed oscillator\n    HSOSC hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));\n    \n    // Simple clock divider\n    always_ff @(posedge int_osc)\n        begin\n            counter &lt;= counter + P;\n        end\n    \n    xor x1(led[0],s[1],s[0]);\n    and a1(led[1],s[3],s[2]);\n    \n    assign led[2] = counter[31];\n    \n\nendmodule\nThree led takes in an input of four switches, s[3:0], and turns on or off leds, led[2:0]."
   },
   {
     "objectID": "labs/lab1/lab1.html#test_bench",
@@ -355,6 +355,13 @@
     "title": "Lab 1",
     "section": "three_testbench ",
     "text": "three_testbench \n Link to Test Bench File"
+  },
+  {
+    "objectID": "labs/lab1/lab1.html#reflection",
+    "href": "labs/lab1/lab1.html#reflection",
+    "title": "Lab 1",
+    "section": "Reflection",
+    "text": "Reflection\nThe code synthesized well and completed with no errors. The quality overall is pretty decent work however it uses a lot more advance features than what we have covered in class so far. It uses a lot of localparam in unsigned vs just having what I did which was logic and it uses integers vs what I used which was all binary which seems that he LLM made it more readable. Overall it is pretty straight forward just syntaxing is a little unfamilar.\nHow would you rate the quality of the output and why? What SystemVerilog constructs/syntax did the LLM generated that were new to you? Did the LLM-generated code synthesize the first time around? If not, what were the issues? What error or warning messages did Radiant output? What would you do differently the next time you use an LLM in your workflow?"
   },
   {
     "objectID": "labs/lab3/lab3.html",
