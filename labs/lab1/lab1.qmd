@@ -18,16 +18,17 @@ date: "9/2/2025"
     5.3 [three_testbench](#three_tb)
 
 6. [Notes](#notes_extra)
+7. [AI Prototype](#aipro)
 
 # This it the Introduction <a name="introdction"></a>
 
-In this lab I built my E155 develpement board with contains a UPduino v3.1 FPGA and a Nucleo-L432KC boards. Using Verilog HDL I programmed the FPGA to control a seven segmented display to show Hexadecimal 0x6 to Fx6. Before programming the board I simulated my hardware in Questa Simulations using a test bench. In addition the FPGA also controls 3 LEDS.
+In this lab I built my E155 develpement board with contains a UPduino v3.1 FPGA and a Nucleo-L432KC boards. Using Verilog HDL I programmed the FPGA to control a seven segmented display to show Hexadecimal 0x0 to 0xF. Before programming the board I simulated my hardware in Questa Simulations using a test bench. In addition the FPGA also controls 3 LEDS. The lab meets all specifications. This Lab took 7 hours.
 
 # Schematic <a name="Schematic"></a>
-![Schematic of Bread Board](images\schematiclab111.png)
+![Schematic of Bread Board](images\lab1schematic.jpg)
 
 # Block Diagram <a name="block_diagram"></a>
-![Blcok Diagramof Verilog Code](images\blockdiagram-12.jpg)
+![Blcok Diagramof Verilog Code](images\lab1block.jpg)
 
 # Verilog Code <a name="verilog_code"></a>
 This section contains verilog code for modules top seven_segment_display and three_led
@@ -40,7 +41,7 @@ module top(
 	output 	logic [2:0]led,
 	output logic [6:0]seg
 );
-
+	//top module for lab1
 	three_led three(s, led);
 	seven_seg_display seven(s,seg);
 	
@@ -58,6 +59,7 @@ module seven_seg_display(
 	input 	logic	[3:0]s,
 	output 	logic [6:0]seg
 );
+	//Seven segment display based on switch inputs, s[3:0] are input switches and seg[6:0] are for each segment of the display
 
 	logic A,B,C,D;
 	
@@ -66,13 +68,42 @@ module seven_seg_display(
 	assign C = s[1];
 	assign D = s[0];
 	
-	assign seg[6] = (~A&~C)&(B^D) | A&(~B&C&D | B&~C);
-	assign seg[5] = D&~(A^C) | B&(C&~D | A&~C&~D);
-	assign seg[4] = ~A&~B&C&~D | (A&B)&( ~C&~D | C);
-	assign seg[3] = (~A&D)& ~(B^C) | (A&~B)&(C^D) | B&( ~(A|C|D) | A&C&D);
-	assign seg[2] = (~A&~B&D) | (~A&B&~C) | (~A&B&C&D) | (A&~B&~C&D);
-	assign seg[1] = (~(A|B|C) & D) | (~A&~B&C) | (~A&B&C&D) | (A&B&~C);
-	assign seg[0] = ~(A|B|C|D) | (~A&~B&~C&D) | (~A&B&C&D);
+	always_comb
+		case(s[3:0])
+			/// 0
+			4'b0000: seg[6:0] = 7'b0000001;
+			/// 1
+			4'b0001: seg[6:0] = 7'b1001111;
+			/// 2
+			4'b0010: seg[6:0] = 7'b0010010;
+			/// 3
+			4'b0011:seg[6:0] = 7'b0000110;
+			/// 4
+			4'b0100:seg[6:0] = 7'b1001100;
+			/// 5
+			4'b0101:seg[6:0] = 7'b0100100;
+			/// 6
+			4'b0110:seg[6:0] = 7'b0100000;
+			/// 7
+			4'b0111:seg[6:0] = 7'b0001111;
+			/// 8
+			4'b1000:seg[6:0] = 7'b0000000;
+			/// 9
+			4'b1001:seg[6:0] = 7'b0001100;
+			/// A
+			4'b1010:seg[6:0] = 7'b0001000;
+			/// B
+			4'b1011:seg[6:0] = 7'b1100000;
+			/// C
+			4'b1100:seg[6:0] = 7'b0110001;
+			/// D
+			4'b1101:seg[6:0] = 7'b1000010;
+			/// E
+			4'b1110:seg[6:0] = 7'b0110000;
+			/// F
+			4'b1111:seg[6:0] = 7'b0111000;
+		endcase
+			
 	
 
 endmodule
@@ -85,6 +116,7 @@ module three_led(
 	input 	logic	[3:0]s,
 	output 	logic [2:0]led
 );
+	// Three led takes in an input of four switches, s[3:0], and turns on or off leds, led[2:0].
 
 	logic int_osc;
 	logic pulse;
@@ -130,4 +162,104 @@ Three led takes in an input of four switches, s[3:0], and turns on or off leds, 
 [Link to Test Bench File](https://github.com/kanparker/E155-lab1/blob/lab1branch/fpga/src/e155_lab1/source/impl_1/testbench_three.sv)
 
 # Notes <a name="notes_extra"></a>
-![LED calculations](images/LABI.-10.jpg)
+![LED calculations](images/lab1curentcalc.jpg)
+
+# AI prototype <a name="aipro"></a>
+Here’s a clean, modern SystemVerilog module that uses the internal high-speed oscillator (HSOSC) of the Lattice iCE40UP5K FPGA to blink an LED at 2 Hz, taking full advantage of SystemVerilog’s strong typing (logic, always_ff, localparam, etc.).
+
+✅ SystemVerilog HDL (for Lattice UP5K)
+```verilog
+//==============================================================
+// Blink LED at 2 Hz using the internal 48 MHz oscillator
+// Target device: Lattice iCE40UP5K
+//==============================================================
+
+module led_blinker_2hz (
+    output logic led
+);
+
+    //==========================================================
+    // Internal oscillator instantiation (Lattice primitive)
+    //==========================================================
+    logic clk_hsosc;
+
+    // The internal oscillator can run up to 48 MHz
+    // Frequency trimming is not needed for simple timing like LED blinking
+    HSOSC #(
+        .CLKHF_DIV("0b00")  // "00" = 48 MHz, "01" = 24 MHz, "10" = 12 MHz, "11" = 6 MHz
+    ) internal_osc (
+        .CLKHFEN(1'b1),     // Enable output
+        .CLKHFPU(1'b1),     // Power up
+        .CLKHF(clk_hsosc)
+    );
+
+    //==========================================================
+    // Clock divider logic
+    //==========================================================
+    //
+    // To blink at 2 Hz (period = 0.5 s per toggle = 1 s full cycle),
+    // with a 48 MHz clock:
+    // 
+    //   cycles_per_toggle = 48e6 / 2 = 24e6
+    //
+    // We'll toggle the LED every 24,000,000 cycles.
+
+    localparam int unsigned CLK_FREQ_HZ = 48_000_000;
+    localparam int unsigned BLINK_HZ    = 2;
+    localparam int unsigned TOGGLE_COUNT = CLK_FREQ_HZ / (2 * BLINK_HZ); // 24,000,000
+
+    logic [$clog2(TOGGLE_COUNT)-1:0] counter = '0;
+
+    always_ff @(posedge clk_hsosc) begin
+        if (counter == TOGGLE_COUNT - 1) begin
+            counter <= '0;
+            led <= ~led;  // Toggle LED
+        end else begin
+            counter <= counter + 1;
+        end
+    end
+
+endmodule
+```
+🧠 Explanation
+
+HSOSC primitive:
+The HSOSC block is a Lattice-specific primitive that provides a high-speed internal clock (up to 48 MHz).
+Setting .CLKHF_DIV("0b00") uses the full 48 MHz.
+
+Clock divider:
+To blink at 2 Hz, the LED toggles every 0.25 seconds (since one toggle = half the period).
+With 48 MHz input → 48e6 / 4 = 12e6 toggles per second per full cycle → 48e6 / (2 * 2) = 12e6.
+
+Modern SystemVerilog constructs used:
+
+logic instead of reg/wire
+
+always_ff for sequential logic
+
+localparam for constants
+
+$clog2() for counter width inference
+
+Clean numeric literals with underscores for readability
+
+⚙️ Synthesis Notes
+
+Works in Lattice Radiant, Diamond, and IceStorm (nextpnr-ice40).
+
+Ensure HSOSC is available in your device library (it is for the UP5K).
+
+When targeting the UP5K on an iCEstick or iCEBreaker, connect the output led to the correct LED pin in your .pcf constraints file.
+
+Would you like me to include a matching .pcf (pin constraint) example for the iCEBreaker board or another specific UP5K board?
+
+## Reflection
+The code synthesized well and completed with no errors. The quality overall is pretty decent work however it uses a lot more advance features than what we 
+have covered in class so far. It uses a lot of localparam in unsigned vs just having what I did which was logic and it uses integers vs what I used which was all binary
+which seems that he LLM made it more readable. Overall it is pretty straight forward just syntaxing is a little unfamilar.
+
+How would you rate the quality of the output and why?
+What SystemVerilog constructs/syntax did the LLM generated that were new to you?
+Did the LLM-generated code synthesize the first time around? If not, what were the issues?
+What error or warning messages did Radiant output?
+What would you do differently the next time you use an LLM in your workflow?
