@@ -1,5 +1,11 @@
 [
   {
+    "listing": "/blog.html",
+    "items": [
+      "/posts/first-post.html"
+    ]
+  },
+  {
     "listing": "/labss.html",
     "items": [
       "/labs/lab1/lab1.html",
@@ -12,9 +18,16 @@
     ]
   },
   {
-    "listing": "/blog.html",
+    "listing": "/project.html",
     "items": [
-      "/posts/first-post.html"
+      "/project/project_final_report/project_final_report.html",
+      "/project/project_overview/project_overview.html"
+    ]
+  },
+  {
+    "listing": "/project_midpoint.html",
+    "items": [
+      "/project_midpoint/project_midpoint.html"
     ]
   }
 ]
