@@ -60,7 +60,7 @@ Below is a figure detailing the bill of materials used in this project.
 *Figure 3: Bill of materials detailing materials aquired for use in this project*
 
 
-### Results
+## Results
 
 In our project, we were unable to achieve the goals we had set for our FPGA design. A major roadblock for us was interfacing the ADC with the FPGA. This error was very confusing with us, as communication over SPI was intermmittent and unstable, but did work occasionally. Too late in our project, we realized that the sampling rate that we wanted to achieve with our FPGA architecture was not compatible with the ADC we had purchased. As a result, we had to modify our clock tree and sampling rate previously designed.
 
