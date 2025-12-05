@@ -13,6 +13,10 @@ website:
         text: LABS
       - href: resources.qmd
         text: resources
+      - href: project.qmd
+        text: Project
+      - href: resources.qmd
+        text: resources
 
 
 format:

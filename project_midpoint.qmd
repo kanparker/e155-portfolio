@@ -1,0 +1,8 @@
+---
+title: "Final Project Midpoint"
+listing:
+    contents: project_midpoint
+    sort: "date desc"
+    type: default
+    categories: false
+---

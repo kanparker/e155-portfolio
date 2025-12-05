@@ -396,49 +396,58 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="ai-prototype" class="level1">
 <h1>AI prototype <a name="aipro"></a></h1>
 <p>Here’s a clean, modern SystemVerilog module that uses the internal high-speed oscillator (HSOSC) of the Lattice iCE40UP5K FPGA to blink an LED at 2 Hz, taking full advantage of SystemVerilog’s strong typing (logic, always_ff, localparam, etc.).</p>
-<p>✅ SystemVerilog HDL (for Lattice UP5K) //============================================================== // Blink LED at 2 Hz using the internal 48 MHz oscillator // Target device: Lattice iCE40UP5K //==============================================================</p>
-<p>module led_blinker_2hz ( output logic led );</p>
-<pre><code>//==========================================================
-// Internal oscillator instantiation (Lattice primitive)
-//==========================================================
-logic clk_hsosc;
-
-// The internal oscillator can run up to 48 MHz
-// Frequency trimming is not needed for simple timing like LED blinking
-HSOSC #(
-    .CLKHF_DIV("0b00")  // "00" = 48 MHz, "01" = 24 MHz, "10" = 12 MHz, "11" = 6 MHz
-) internal_osc (
-    .CLKHFEN(1'b1),     // Enable output
-    .CLKHFPU(1'b1),     // Power up
-    .CLKHF(clk_hsosc)
-);
-
-//==========================================================
-// Clock divider logic
-//==========================================================
-//
-// To blink at 2 Hz (period = 0.5 s per toggle = 1 s full cycle),
-// with a 48 MHz clock:
-// 
-//   cycles_per_toggle = 48e6 / 2 = 24e6
-//
-// We'll toggle the LED every 24,000,000 cycles.
-
-localparam int unsigned CLK_FREQ_HZ = 48_000_000;
-localparam int unsigned BLINK_HZ    = 2;
-localparam int unsigned TOGGLE_COUNT = CLK_FREQ_HZ / (2 * BLINK_HZ); // 24,000,000
-
-logic [$clog2(TOGGLE_COUNT)-1:0] counter = '0;
-
-always_ff @(posedge clk_hsosc) begin
-    if (counter == TOGGLE_COUNT - 1) begin
-        counter &lt;= '0;
-        led &lt;= ~led;  // Toggle LED
-    end else begin
-        counter &lt;= counter + 1;
-    end
-end</code></pre>
-<p>endmodule</p>
+<p>✅ SystemVerilog HDL (for Lattice UP5K)</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode verilog code-with-copy"><code class="sourceCode verilog"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">//==============================================================</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Blink LED at 2 Hz using the internal 48 MHz oscillator</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Target device: Lattice iCE40UP5K</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">//==============================================================</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">module</span> led_blinker_2hz <span class="op">(</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">output</span> logic led</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="op">);</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">//==========================================================</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Internal oscillator instantiation (Lattice primitive)</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">//==========================================================</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    logic clk_hsosc<span class="op">;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="co">// The internal oscillator can run up to 48 MHz</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Frequency trimming is not needed for simple timing like LED blinking</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    HSOSC #<span class="op">(</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        .CLKHF_DIV<span class="op">(</span><span class="st">"0b00"</span><span class="op">)</span>  <span class="co">// "00" = 48 MHz, "01" = 24 MHz, "10" = 12 MHz, "11" = 6 MHz</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">)</span> internal_osc <span class="op">(</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        .CLKHFEN<span class="op">(</span><span class="bn">1'b1</span><span class="op">),</span>     <span class="co">// Enable output</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        .CLKHFPU<span class="op">(</span><span class="bn">1'b1</span><span class="op">),</span>     <span class="co">// Power up</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        .CLKHF<span class="op">(</span>clk_hsosc<span class="op">)</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">//==========================================================</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Clock divider logic</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="co">//==========================================================</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">//</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">// To blink at 2 Hz (period = 0.5 s per toggle = 1 s full cycle),</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">// with a 48 MHz clock:</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">// </span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">//   cycles_per_toggle = 48e6 / 2 = 24e6</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">//</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">// We'll toggle the LED every 24,000,000 cycles.</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="dt">localparam</span> int unsigned CLK_FREQ_HZ <span class="op">=</span> <span class="dv">48</span>_000_000<span class="op">;</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="dt">localparam</span> int unsigned BLINK_HZ    <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="dt">localparam</span> int unsigned TOGGLE_COUNT <span class="op">=</span> CLK_FREQ_HZ <span class="op">/</span> <span class="op">(</span><span class="dv">2</span> * BLINK_HZ<span class="op">);</span> <span class="co">// 24,000,000</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    logic <span class="op">[</span><span class="dt">$clog2</span><span class="op">(</span>TOGGLE_COUNT<span class="op">)-</span><span class="dv">1</span><span class="op">:</span><span class="dv">0</span><span class="op">]</span> counter <span class="op">=</span> '<span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    always_ff <span class="op">@(</span><span class="kw">posedge</span> clk_hsosc<span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>        <span class="kw">if</span> <span class="op">(</span>counter <span class="op">==</span> TOGGLE_COUNT <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> <span class="kw">begin</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>            counter <span class="op">&lt;=</span> '<span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>            led <span class="op">&lt;=</span> <span class="op">~</span>led<span class="op">;</span>  <span class="co">// Toggle LED</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span> <span class="kw">else</span> <span class="kw">begin</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>            counter <span class="op">&lt;=</span> counter <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="kw">endmodule</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>🧠 Explanation</p>
 <p>HSOSC primitive: The HSOSC block is a Lattice-specific primitive that provides a high-speed internal clock (up to 48 MHz). Setting .CLKHF_DIV(“0b00”) uses the full 48 MHz.</p>
 <p>Clock divider: To blink at 2 Hz, the LED toggles every 0.25 seconds (since one toggle = half the period). With 48 MHz input → 48e6 / 4 = 12e6 toggles per second per full cycle → 48e6 / (2 * 2) = 12e6.</p>

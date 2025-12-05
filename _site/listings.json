@@ -16,5 +16,18 @@
     "items": [
       "/posts/first-post.html"
     ]
+  },
+  {
+    "listing": "/project_midpoint.html",
+    "items": [
+      "/project_midpoint/project_midpoint.html"
+    ]
+  },
+  {
+    "listing": "/project.html",
+    "items": [
+      "/project/project_final_report/project_final_report.html",
+      "/project/project_overview/project_overview.html"
+    ]
   }
 ]
