@@ -173,10 +173,8 @@ window.Quarto = {
   <li><a href="#mcu-design-information" id="toc-mcu-design-information" class="nav-link" data-scroll-target="#mcu-design-information">MCU Design Information</a></li>
   <li><a href="#new-digital-chip-microchip-mcp3202-adc" id="toc-new-digital-chip-microchip-mcp3202-adc" class="nav-link" data-scroll-target="#new-digital-chip-microchip-mcp3202-adc">New Digital Chip: Microchip MCP3202 ADC</a></li>
   <li><a href="#electrical-schematic" id="toc-electrical-schematic" class="nav-link" data-scroll-target="#electrical-schematic">Electrical Schematic</a></li>
-  <li><a href="#bill-of-materials" id="toc-bill-of-materials" class="nav-link" data-scroll-target="#bill-of-materials">Bill of Materials</a>
-  <ul class="collapse">
+  <li><a href="#bill-of-materials" id="toc-bill-of-materials" class="nav-link" data-scroll-target="#bill-of-materials">Bill of Materials</a></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
-  </ul></li>
   <li><a href="#reflection" id="toc-reflection" class="nav-link" data-scroll-target="#reflection">Reflection</a></li>
   <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
   <li><a href="#references-and-code" id="toc-references-and-code" class="nav-link" data-scroll-target="#references-and-code">References and Code</a></li>
@@ -336,8 +334,9 @@ window.Quarto = {
 </tbody>
 </table>
 <p><em>Figure 3: Bill of materials detailing materials aquired for use in this project</em></p>
-<section id="results" class="level3">
-<h3 class="anchored" data-anchor-id="results">Results</h3>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
 <p>In our project, we were unable to achieve the goals we had set for our FPGA design. A major roadblock for us was interfacing the ADC with the FPGA. This error was very confusing with us, as communication over SPI was intermmittent and unstable, but did work occasionally. Too late in our project, we realized that the sampling rate that we wanted to achieve with our FPGA architecture was not compatible with the ADC we had purchased. As a result, we had to modify our clock tree and sampling rate previously designed.</p>
 <p>Another major roadblock we navigated was loading the shift register for the MCU to read samples from the FPGA. This happened because the FPGA ran on its own clock domain, and the MCU ran its SPI transactions on a separate clock that ran approximately 500 MHz faster than that on the FPGA. However, this roadbock was successfully navigated and can be seen in the following section.</p>
 <p>The MCU systems we aimed to implement worked well on their own. The first major piece of our design was the SPI communications between the MCU and the FPGA. By looking at the digital trace of these communications below, we can see that the MCU successfully retrieved a sample from the FPGA.</p>
@@ -346,7 +345,6 @@ window.Quarto = {
 <p><img src="images/mcu_dac_wave.png" class="img-fluid" alt="image"> <em>Figure 5: Clean MCU output wave trace</em></p>
 <p>Finally, we implemented the distortion effect, which functions by clipping the edges of our signal range to make our audio waves more square. This gives the audio a distorted effect, which can be seen in songs as early as <em>Voodoo Child (Slight Return)</em> by Jimi Hendrix. Below is an oscilloscope trace conveying a working distortion signal using sample data.</p>
 <p><img src="images/mcu_dac_wave_clipped.png" class="img-fluid" alt="image"> <em>Figure 6: MCU output wave trace with distortion</em></p>
-</section>
 </section>
 <section id="reflection" class="level2">
 <h2 class="anchored" data-anchor-id="reflection">Reflection</h2>
